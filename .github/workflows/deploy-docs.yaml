@@ -1,0 +1,25 @@
+name: Deploy Documentation
+on:
+  push:
+    branches:
+      - main  # or whatever your default branch is
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Build and deploy
+        run: mkdocs gh-deploy --force

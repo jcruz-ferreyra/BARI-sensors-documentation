@@ -1,0 +1,142 @@
+site_name: BARI Environmental Sensor Network Documentation
+site_description: Complete documentation for the Common SENSES sensor data pipeline
+site_author: Juan Cruz
+
+theme:
+  name: material
+  palette:
+    scheme: default
+  features:
+    - navigation.indexes 
+    - navigation.top
+    - search.suggest
+    - search.highlight
+  
+extra_css:
+  - assets/stylesheets/extra.css
+
+plugins:
+  - search
+  - macros
+
+extra:
+  project:
+    name: "BARI Environmental Sensor Network"
+    full_name: "Boston Area Research Initiative Environmental Sensor Network"
+  
+  sensors:
+    active_count: 55
+    total_deployed: 53
+    deployment_area: "Blue Hill Avenue corridor, Boston"
+    collection_interval: "15 minutes"
+  
+  data:
+    readings_per_day: "~79,000"
+    readings_per_month: "~2.4M"
+    timezone_storage: "UTC"
+    timezone_display: "US/Eastern"
+  
+  costs:
+    monthly_target: 80
+    alert_warning: 90
+    alert_critical: 100
+    currency: "USD"
+  
+  urls:
+    project_website: "https://www.commonsensesproject.org/"
+    map_public: "https://www.commonsensesproject.org/live-sensor-data"
+    heat_dashboard_public: "https://zealous-ocean-0968e670f.3.azurestaticapps.net/heat?deployment_id=5"
+    noise_dashboard_public: "https://zealous-ocean-0968e670f.3.azurestaticapps.net/noise?deployment_id=5"
+  
+  dates:
+    deployment_date: "December 2025"
+    last_updated: "January 2026"
+  
+  contacts:
+    research_team:
+      - name: "Dan"
+        role: "Technical guidance and research direction"
+      - name: "Amy"
+        role: "Sensor deployment coordination"
+    
+    project_lead:
+      name: "Juan Cruz"
+      role: "System design, implementation, handoff"
+    
+    community_partners:
+      - "Dudley Street Neighborhood Initiative"
+      - "Project R.I.G.H.T. Inc."
+    
+    city_partner: "Office of Emerging Technology, City of Boston"
+
+nav:
+  - Home: index.md
+  - Overview: 00-overview.md
+  
+  - Understanding the System:
+    - What It Does: 01-understanding-the-system/what-it-does.md
+    - Architecture: 01-understanding-the-system/architecture.md
+    - Data Flow: 01-understanding-the-system/data-flow.md
+    - Design Decisions: 01-understanding-the-system/design-decisions.md
+  
+  - Working with Data:
+    - Quick Start: 02-working-with-data/quick-start.md
+    - Connecting to Database: 02-working-with-data/connecting-to-database.md
+    - Common Queries: 02-working-with-data/common-queries.md
+    - Blob Storage Access: 02-working-with-data/blob-storage-access.md
+    - Understanding the Schema: 02-working-with-data/understanding-the-schema.md
+    - Data Quality: 02-working-with-data/data-quality.md
+  
+  - Operating the System:
+    - Daily Checklist: 03-operating-the-system/daily-checklist.md
+    - Monitoring Health: 03-operating-the-system/monitoring-health.md
+    - Cost Tracking: 03-operating-the-system/cost-tracking.md
+    - Sensor Lifecycle: 03-operating-the-system/sensor-lifecycle.md
+    - Troubleshooting:
+      - Sensor Not Reporting: 03-operating-the-system/troubleshooting/sensor-not-reporting.md
+      - Function Errors: 03-operating-the-system/troubleshooting/function-errors.md
+      - Database Issues: 03-operating-the-system/troubleshooting/database-issues.md
+      - Dashboard Problems: 03-operating-the-system/troubleshooting/dashboard-problems.md
+  
+  - Making Changes:
+    - Deploying Code Updates: 04-making-changes/deploying-code-updates.md
+    - Updating Dashboard: 04-making-changes/updating-dashboard.md
+    - Database Changes: 04-making-changes/database-changes.md
+    - Sensor Configuration: 04-making-changes/sensor-configuration.md
+    - Infrastructure Changes: 04-making-changes/infrastructure-changes.md
+  
+  - Reference:
+    - Azure Infrastructure:
+      - Function Apps: 05-reference/azure-infrastructure/function-apps.md
+      - SQL Database: 05-reference/azure-infrastructure/sql-database.md
+      - Blob Storage: 05-reference/azure-infrastructure/blob-storage.md
+      - Networking: 05-reference/azure-infrastructure/networking.md
+      - Static Web App: 05-reference/azure-infrastructure/static-web-app.md
+    - Particle Platform: 05-reference/particle-platform.md
+    - Complete Schema: 05-reference/complete-schema.md
+    - Function Code Reference: 05-reference/function-code-reference.md
+    - API Endpoints: 05-reference/api-endpoints.md
+  
+  - Appendices:
+    - Step-by-Step Guides:
+      - Create SQL Database: 06-appendices/step-by-step-guides/create-sql-database.md
+      - Configure VNet: 06-appendices/step-by-step-guides/configure-vnet.md
+      - Deploy Function App: 06-appendices/step-by-step-guides/deploy-function-app.md
+    - SQL Query Library: 06-appendices/sql-query-library.md
+    - Error Codes: 06-appendices/error-codes.md
+    - Contacts: 06-appendices/contacts.md
+
+markdown_extensions:
+  - tables
+  - fenced_code
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
