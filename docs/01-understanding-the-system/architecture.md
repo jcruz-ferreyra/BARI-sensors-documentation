@@ -1,24 +1,171 @@
-## Functional Architecture
+# System Architecture
 
-The diagram below shows the complete data flow from sensors to public dashboard:
+[Brief intro paragraph - what this page shows]
 
-<p align="center">
-  <img src="images/diagrams/02-functional-architecture.png" alt="Functional Architecture Diagram" width="800">
+## Architecture Overview
+
+![Functional Architecture](../images/diagrams/functional-architecture.png)
+
+
+## Core Components
+
+<p>
+  <img src="/images/diagrams/icon-sensor.png" width="30" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Particle Sensors</strong>
 </p>
 
-### Data Flow Overview
+{{ sensors.active_count }} environmental sensors deployed throughout the Common SENSES project area. Each sensor collects temperature, humidity, and noise data every {{ sensors.collection_interval }} and transmits readings to Particle Cloud via cellular connection.
 
-1. **Sensors (55 Particle.io devices)** collect temperature, humidity, and noise data every 15 minutes
-2. **Particle Cloud** triggers webhooks when new data arrives
-3. **Webhook Function** receives JSON payloads via HTTPS POST and writes to Blob Storage
-4. **Blob Storage** archives raw sensor data and triggers the processor function
-5. **Blob Processor Function** reads, deduplicates, and writes cleaned data to SQL Database
-6. **SQL Database** stores validated sensor readings with composite indexes
-7. **API Function** serves data requests from the dashboard via HTTPS GET
-8. **Public Dashboard** (Static Web App) displays interactive visualizations for researchers and public
+For technical specifications see [Particle Platform Reference](../05-reference/particle-platform.md#sensors).
 
-**Legend:**
-- Solid arrows (→) = Push/Write operations
-- Dashed arrows (⇢) = Pull/Trigger/Read operations
-- Rectangles = Processing components
-- Cylinders = Storage components
+<p>
+  <img src="/images/diagrams/icon-particle.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Particle Cloud</strong>
+</p>
+
+Particle.io's cloud platform receives data from sensors and triggers webhooks to deliver readings to Azure infrastructure.
+
+For webhook configuration details see [Particle Platform Reference](../05-reference/particle-platform.md#webhooks).
+
+<p>
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Webhook Receiver</strong>
+</p>
+
+Azure Function that receives JSON payloads from Particle webhooks, validates and parses sensor data, then writes to Blob Storage as individual files. Each webhook delivery contains multiple sensor readings grouped together.
+
+For function code and configuration see [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#webhook-receiver).
+
+<p>
+  <img src="/images/diagrams/icon-blob.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Blob Storage</strong>
+</p>
+
+Azure Blob Storage container organized into folders (incoming/, archived/, failed-writing/) that stores raw sensor data as JSON files for downstream processing.
+
+For storage organization and access see [Blob Storage Reference](../05-reference/azure-infrastructure/blob-storage.md).
+
+<p>
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Database Writer</strong>
+</p>
+
+Azure Function that runs every {{ processing.writer_schedule }} to process files in the incoming/ folder. Validates, deduplicates, and writes sensor readings to the SQL database, then moves processed files to archived/ or failed-{reason}/ folders.
+
+For function code and configuration see [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#database-writer).
+
+<p>
+  <img src="/images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>SQL Database</strong>
+</p>
+
+Azure SQL Database that stores validated sensor readings, error logs, startup events, and sensor deployment records. Primary data source for research analysis and dashboard queries.
+
+For complete schema details see [Complete Schema Reference](../05-reference/complete-schema.md) and [SQL Database Reference](../05-reference/azure-infrastructure/sql-database.md).
+
+<p>
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>API</strong>
+</p>
+Azure Function that provides HTTP endpoints for querying sensor data. Serves the public dashboard with filtered, aggregated data based on time ranges and sensor selections.
+
+For endpoint documentation see [API Endpoints Reference](../05-reference/api-endpoints.md) and [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#api).
+
+<p>
+  <img src="/images/diagrams/icon-dash.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Public Facing Dashboard</strong>
+</p>
+Azure Static Web App hosting the public dashboard at [link]({{ urls.heat_dashboard_public }}) for heat data and [link]({{ urls.noise_dashboard_public }}) for noise data. Built with vanilla JavaScript and Plotly.js for data visualization.
+
+For dashboard code and deployment see [Static Web App Reference](../05-reference/azure-infrastructure/static-web-app.md).
+
+<p>
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Daily Reporter</strong>
+</p>
+Azure Function that runs on a daily schedule to send operational summaries via email. Reports include sensor health status, data collection metrics, and any errors from the previous 24 hours.
+
+For function code and configuration see [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#daily-reporter).
+
+
+## Component Interactions
+
+<p>
+  <img src="/images/diagrams/icon-sensor.png" width="30" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Particle Sensors</strong>
+  →
+  <img src="/images/diagrams/icon-particle.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Particle Cloud</strong>
+</p>
+
+Sensors transmit readings via cellular connection every {{ sensors.collection_interval }}.
+
+<p>
+  <img src="/images/diagrams/icon-particle.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Particle Cloud</strong>
+  →
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Webhook Receiver</strong>
+</p>
+
+Particle Cloud pushes sensor data to Webhook Receiver via HTTP webhook.
+
+<p>
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Webhook Receiver</strong>
+  →
+  <img src="/images/diagrams/icon-blob.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Blob Storage</strong>
+</p>
+
+Webhook Receiver writes validated JSON files to incoming/ folder in Blob Storage.
+
+<p>
+  <img src="/images/diagrams/icon-blob.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Blob Storage</strong>
+  ⇢
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Database Writer</strong>
+</p>
+
+Database Writer polls incoming/ folder on schedule to retrieve unprocessed files.
+
+<p>
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Database Writer</strong>
+  →
+  <img src="/images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>SQL Database</strong>
+</p>
+
+Database Writer validates, deduplicates, and writes sensor readings to database tables.
+
+<p>
+  <img src="/images/diagrams/icon-dash.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Public Dashboard</strong>
+  →
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>API Function</strong>
+</p>
+
+Dashboard sends requests to API endpoints based on user-selected time ranges and sensors.
+
+<p>
+  <img src="/images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>SQL Database</strong>
+  ⇢
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>API Function</strong>
+</p>
+
+API Function queries database and returns filtered, aggregated sensor readings.
+
+<p>
+  <img src="/images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>SQL Database</strong>
+  ⇢
+  <img src="/images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
+  <strong>Daily Reporter</strong>
+</p>
+
+Daily Reporter queries operational metrics and sends summary email reports on schedule.

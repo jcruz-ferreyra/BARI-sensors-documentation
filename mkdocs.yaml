@@ -35,6 +35,9 @@ extra:
     readings_per_month: "~2.4M"
     timezone_storage: "UTC"
     timezone_display: "US/Eastern"
+
+  processing:
+    writer_schedule: "30 minutes"
   
   costs:
     monthly_target: 80
@@ -74,7 +77,6 @@ nav:
   - Overview: 00-overview.md
   
   - Understanding the System:
-    - What It Does: 01-understanding-the-system/what-it-does.md
     - Architecture: 01-understanding-the-system/architecture.md
     - Data Flow: 01-understanding-the-system/data-flow.md
     - Design Decisions: 01-understanding-the-system/design-decisions.md

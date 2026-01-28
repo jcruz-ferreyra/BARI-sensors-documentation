@@ -1,0 +1,16 @@
+:root {
+  --md-primary-fg-color: #A02C37;        /* Deep red - headers, nav */
+  --md-primary-fg-color--light: #83AC62; /* Green - accents */
+  --md-primary-fg-color--dark: #A02C37;
+  --md-accent-fg-color: #F5C117;         /* Yellow - links, buttons */
+  --md-default-bg-color: #FFFCF9;        /* Cream background */
+}
+
+/* Optional: customize specific elements */
+.md-header {
+  background-color: #A02C37;
+}
+
+.md-nav__link--active {
+  color: #83AC62;
+}
