@@ -74,82 +74,56 @@ For function code and configuration see [Function Apps Reference](../05-referenc
 
 ## Component Interactions
 
-<p>
-  <img src="images/diagrams/icon-sensor.png" width="30" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Particle Sensors</strong>
-  →
-  <img src="images/diagrams/icon-particle.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Particle Cloud</strong>
-</p>
+![Particle Sensors](../images/diagrams/icon-sensor.png){ width="30" style="vertical-align: middle; opacity: 0.7" } **Particle Sensors**
+→
+![Particle Cloud](../images/diagrams/icon-particle.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Particle Cloud**
 
 Sensors transmit readings via cellular connection every {{ sensors.collection_interval }}.
 
-<p>
-  <img src="images/diagrams/icon-particle.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Particle Cloud</strong>
-  →
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Webhook Receiver</strong>
-</p>
+
+![Particle Cloud](../images/diagrams/icon-particle.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Particle Cloud**
+→
+![Webhook Receiver](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Webhook Receiver**
 
 Particle Cloud pushes sensor data to Webhook Receiver via HTTP webhook.
 
-<p>
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Webhook Receiver</strong>
-  →
-  <img src="images/diagrams/icon-blob.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Blob Storage</strong>
-</p>
+
+![Webhook Receiver](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Webhook Receiver**
+→
+![Blob Storage](../images/diagrams/icon-blob.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Blob Storage**
 
 Webhook Receiver writes validated JSON files to incoming/ folder in Blob Storage.
 
-<p>
-  <img src="images/diagrams/icon-blob.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Blob Storage</strong>
-  ⇢
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Database Writer</strong>
-</p>
+![Blob Storage](../images/diagrams/icon-blob.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Blob Storage**
+⇢
+![Database Writer](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Database Writer**
 
 Database Writer polls incoming/ folder on schedule to retrieve unprocessed files.
 
-<p>
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Database Writer</strong>
-  →
-  <img src="images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>SQL Database</strong>
-</p>
+
+![Database Writer](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Database Writer**
+→
+![SQL Database](../images/diagrams/icon-sql.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **SQL Database**
 
 Database Writer validates, deduplicates, and writes sensor readings to database tables.
 
-<p>
-  <img src="images/diagrams/icon-dash.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Public Dashboard</strong>
-  →
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>API Function</strong>
-</p>
+
+![Public Facing Dashboard](../images/diagrams/icon-dash.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Public Facing Dashboard**
+→
+![API](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **API**
 
 Dashboard sends requests to API endpoints based on user-selected time ranges and sensors.
 
-<p>
-  <img src="images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>SQL Database</strong>
-  ⇢
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>API Function</strong>
-</p>
+
+![SQL Database](../images/diagrams/icon-sql.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **SQL Database**
+⇢
+![API](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **API**
 
 API Function queries database and returns filtered, aggregated sensor readings.
 
-<p>
-  <img src="images/diagrams/icon-sql.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>SQL Database</strong>
-  ⇢
-  <img src="images/diagrams/icon-func.png" width="20" style="vertical-align: middle; opacity: 0.7;">
-  <strong>Daily Reporter</strong>
-</p>
+
+![SQL Database](../images/diagrams/icon-sql.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **SQL Database**
+⇢
+![Daily Reporter](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Daily Reporter**
 
 Daily Reporter queries operational metrics and sends summary email reports on schedule.
