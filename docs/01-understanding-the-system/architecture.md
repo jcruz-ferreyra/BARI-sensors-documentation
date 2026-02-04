@@ -15,6 +15,7 @@ This page provides a high-level view of the BARI Environmental Sensor Network in
 
 For technical specifications see [Particle Platform Reference](../05-reference/particle-platform.md#sensors).
 
+---
 
 ![Particle Cloud](../images/diagrams/icon-particle.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Particle Cloud**
 
@@ -22,6 +23,7 @@ Particle.io's cloud platform receives data from sensors and triggers webhooks to
 
 For webhook configuration details see [Particle Platform Reference](../05-reference/particle-platform.md#webhooks).
 
+---
 
 ![Webhook Receiver](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Webhook Receiver**
 
@@ -29,6 +31,7 @@ Azure Function that receives JSON payloads from Particle webhooks, validates and
 
 For function code and configuration see [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#webhook-receiver).
 
+---
 
 ![Blob Storage](../images/diagrams/icon-blob.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Blob Storage**
 
@@ -36,6 +39,7 @@ Azure Blob Storage container organized into folders (incoming/, archived/, faile
 
 For storage organization and access see [Blob Storage Reference](../05-reference/azure-infrastructure/blob-storage.md).
 
+---
 
 ![Database Writer](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Database Writer**
 
@@ -43,6 +47,7 @@ Azure Function that runs every {{ processing.writer_schedule }} to process files
 
 For function code and configuration see [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#database-writer).
 
+---
 
 ![SQL Database](../images/diagrams/icon-sql.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **SQL Database**
 
@@ -50,6 +55,7 @@ Azure SQL Database that stores validated sensor readings, error logs, startup ev
 
 For complete schema details see [Complete Schema Reference](../05-reference/complete-schema.md) and [SQL Database Reference](../05-reference/azure-infrastructure/sql-database.md).
 
+---
 
 ![API](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **API**
 
@@ -57,6 +63,7 @@ Azure Function that provides HTTP endpoints for querying sensor data. Serves the
 
 For endpoint documentation see [API Endpoints Reference](../05-reference/api-endpoints.md) and [Function Apps Reference](../05-reference/azure-infrastructure/function-apps.md#api).
 
+---
 
 ![Public Facing Dashboard](../images/diagrams/icon-dash.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Public Facing Dashboard**
 
@@ -64,6 +71,7 @@ Azure Static Web App hosting the public dashboard at [link]({{ urls.heat_dashboa
 
 For dashboard code and deployment see [Static Web App Reference](../05-reference/azure-infrastructure/static-web-app.md).
 
+---
 
 ![Daily Reporter](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Daily Reporter**
 
@@ -80,6 +88,7 @@ For function code and configuration see [Function Apps Reference](../05-referenc
 
 Sensors transmit readings via cellular connection every {{ sensors.collection_interval }}.
 
+---
 
 ![Particle Cloud](../images/diagrams/icon-particle.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Particle Cloud**
 →
@@ -87,6 +96,7 @@ Sensors transmit readings via cellular connection every {{ sensors.collection_in
 
 Particle Cloud pushes sensor data to Webhook Receiver via HTTP webhook.
 
+---
 
 ![Webhook Receiver](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Webhook Receiver**
 →
@@ -94,12 +104,15 @@ Particle Cloud pushes sensor data to Webhook Receiver via HTTP webhook.
 
 Webhook Receiver writes validated JSON files to incoming/ folder in Blob Storage.
 
+---
+
 ![Blob Storage](../images/diagrams/icon-blob.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Blob Storage**
 ⇢
 ![Database Writer](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Database Writer**
 
 Database Writer polls incoming/ folder on schedule to retrieve unprocessed files.
 
+---
 
 ![Database Writer](../images/diagrams/icon-func.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Database Writer**
 →
@@ -107,6 +120,7 @@ Database Writer polls incoming/ folder on schedule to retrieve unprocessed files
 
 Database Writer validates, deduplicates, and writes sensor readings to database tables.
 
+---
 
 ![Public Facing Dashboard](../images/diagrams/icon-dash.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **Public Facing Dashboard**
 →
@@ -114,6 +128,7 @@ Database Writer validates, deduplicates, and writes sensor readings to database 
 
 Dashboard sends requests to API endpoints based on user-selected time ranges and sensors.
 
+---
 
 ![SQL Database](../images/diagrams/icon-sql.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **SQL Database**
 ⇢
@@ -121,6 +136,7 @@ Dashboard sends requests to API endpoints based on user-selected time ranges and
 
 API Function queries database and returns filtered, aggregated sensor readings.
 
+---
 
 ![SQL Database](../images/diagrams/icon-sql.png){ width="20" style="vertical-align: middle; opacity: 0.7" } **SQL Database**
 ⇢
