@@ -82,12 +82,15 @@ nav:
     - Design Decisions: 01-understanding-the-system/design-decisions.md
   
   - Working with Data:
-    - Quick Start: 02-working-with-data/quick-start.md
-    - Connecting to Database: 02-working-with-data/connecting-to-database.md
-    - Common Queries: 02-working-with-data/common-queries.md
-    - Blob Storage Access: 02-working-with-data/blob-storage-access.md
-    - Understanding the Schema: 02-working-with-data/understanding-the-schema.md
-    - Data Quality: 02-working-with-data/data-quality.md
+      - Quick Start: 02-working-with-data/quick-start.md
+      - Database:
+        - Connecting: 02-working-with-data/database/connecting.md
+        - Understanding the Schema: 02-working-with-data/database/understanding-schema.md
+        - Common Queries: 02-working-with-data/database/common-queries.md
+        - Data Quality: 02-working-with-data/database/data-quality.md
+      - Blob Storage:
+        - Accessing Blobs: 02-working-with-data/blob-storage/accessing-blobs.md
+        - Blob Structure: 02-working-with-data/blob-storage/blob-structure.md
   
   - Operating the System:
     - Daily Checklist: 03-operating-the-system/daily-checklist.md

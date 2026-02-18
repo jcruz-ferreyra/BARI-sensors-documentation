@@ -52,3 +52,28 @@
     ├── sql-query-library.md         # Extended query examples
     ├── error-codes.md               # What each error means
     └── contacts.md                  # Who to call for what
+
+===============================================================
+
+For database:
+
+├── 02-working-with-data/
+│   ├── quick-start.md               # "I just need data NOW"
+│   ├── connecting-to-database.md    # Connection strings, auth, network access ✓
+│   ├── common-queries.md            # Copy-paste SQL for typical tasks ✓
+│   ├── blob-storage-access.md       # Getting raw JSON files
+│   ├── understanding-the-schema.md  # Table relationships, what each column means ✓
+│   └── data-quality.md              # Flags, duplicates, missing data handling ✓
+│
+├── 03-operating-the-system/
+│   ├── monitoring-health.md         # Database health checks, DTU, storage ✓
+│   └── ...
+│
+├── 04-making-changes/
+│   ├── database-changes.md          # Schema migrations, sensor metadata updates ✓
+│   └── ...
+│
+└── 05-reference/
+    ├── azure-infrastructure/
+    │   └── sql-database.md          # Complete technical specs, indexes, performance ✓
+    └── complete-schema.md           # Every table, column, index ✓
