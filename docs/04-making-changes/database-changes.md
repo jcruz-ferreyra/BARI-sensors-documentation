@@ -397,30 +397,13 @@ If other unresolved issues exist for this sensor, unflagging all quality_ok = 0 
 
 ---
 
-<!-- ### Schema Modifications
+### Schema Modifications
 
-**Adding New Columns**
+Schema changes (adding columns, creating indexes) are rare but occasionally needed. 
 
-- Procedures for schema migrations
-- Testing changes in development environment
-- Deployment to production
+**Before making changes:**
+- Test queries thoroughly before running on production database
+- Document what you're changing and why
+- Have rollback plan if something breaks
 
-**Creating New Indexes**
-
-- When to add indexes
-- Testing index performance impact
-- Monitoring index usage
-
-### Backup and Rollback
-
-**Before Making Changes**
-
-- Creating manual backups for critical updates
-- Testing queries in read-only mode first
-- Documenting changes made
-
-**Rolling Back Changes**
-
-- Identifying incorrect updates
-- Restoring from backup if needed
-- Audit trail considerations -->
+**Contact research team or IT before making structural changes to the database.**

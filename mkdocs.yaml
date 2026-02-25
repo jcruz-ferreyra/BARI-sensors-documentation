@@ -65,6 +65,10 @@ extra:
     project_lead:
       name: "Juan Cruz"
       role: "System design, implementation, handoff"
+
+    technical_administrator:
+      name: "Juan Cruz"
+      role: "Database access, Azure resource management, troubleshooting"
     
     community_partners:
       - "Dudley Street Neighborhood Initiative"
@@ -79,6 +83,7 @@ nav:
   - Understanding the System:
     - Architecture: 01-understanding-the-system/architecture.md
     - Data Flow: 01-understanding-the-system/data-flow.md
+    - Networking Overview: 01-understanding-the-system/networking-overview.md
     - Design Decisions: 01-understanding-the-system/design-decisions.md
   
   - Working with Data:
