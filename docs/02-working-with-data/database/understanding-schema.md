@@ -29,7 +29,7 @@ Unique identifier for this deployment. Referenced by nu_readings to link sensor 
 Physical sensor identifier (1-55). This number is printed on the sensor hardware and appears in sensor messages.
 
 **location_id** (int, null)
-Optional reference to a standardized location. Currently not used.
+Optional reference to a standardized location.
 
 **coreid** (nvarchar(255), not null)
 Particle device ID - unique hardware identifier from Particle.io platform. Used to validate webhook data comes from legitimate sensors.
@@ -121,7 +121,7 @@ Noise level in decibels (dB). NULL if sensor malfunction or data quality issue d
 Calculated heat index in Fahrenheit using temperature and humidity. Computed by Database Writer using the [NWS equation](https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml).
 
 **source_blob** (nvarchar(255), not null)
-Filename of the blob containing the raw sensor data for this reading. Enables tracing back to original data if issues arise.
+Filename of the blob containing the raw sensor data for this reading. Format: `{box_id}_{YYYYMMDDTHHMM}` where the timestamp represents when data arrived at the Webhook Receiver (UTC). Enables tracing back to original data and querying by pipeline arrival time. See [Common Queries - Advanced](common-queries.md#advanced-querying-by-pipeline-arrival-time) for usage examples.
 
 **created_at** (datetime2(7), null)
 UTC timestamp when this record was written to the database. Used by Daily Reporter to track data pipeline performance.

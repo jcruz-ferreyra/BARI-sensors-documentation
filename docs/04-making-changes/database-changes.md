@@ -254,29 +254,37 @@ These procedures handle scenarios where database records need updating after dat
 Find how many readings need updating:
 
     ```sql
-    SELECT COUNT(*) as affected_readings
-    FROM nu_readings r
-    JOIN nu_sensors s_old ON r.deployment_id = s_old.deployment_id
-    JOIN nu_sensors s_new ON r.box_id = s_new.box_id
-    WHERE r.box_id = 9
-    AND s_new.deployment_id = 56  -- New deployment
-    AND r.timestamp >= s_new.install_datetime  -- Readings after new install
-    AND r.deployment_id = s_old.deployment_id  -- Still using old deployment
-    AND s_old.deployment_id != s_new.deployment_id;
+    -- Example: new deployment_id = 60, box_id = 10
+    DECLARE @install_datetime DATETIME2;
+    SELECT @install_datetime = install_datetime FROM nu_sensors WHERE deployment_id = 60;
+
+    SELECT COUNT(*) as affected_readings  -- Use SELECT * for the full list of affected rows
+    FROM nu_readings
+    WHERE box_id = 10
+    AND created_at >= @install_datetime
+    AND timestamp >= @install_datetime
+    AND deployment_id != 60;
     ```
 
 **Step 2: Update the readings**
 
     ```sql
+    -- Example: new deployment_id = 60, box_id = 10
+    DECLARE @install_datetime DATETIME2;
+    SELECT @install_datetime = install_datetime FROM nu_sensors WHERE deployment_id = 60;
+
     UPDATE nu_readings
-    SET deployment_id = 56  -- New deployment_id
-    WHERE box_id = 9
-    AND timestamp >= '2025-10-31 11:59:00'  -- install_datetime of new deployment
-    AND deployment_id = 9;  -- Old deployment_id
+    SET deployment_id = 60, quality_ok = 1
+    WHERE box_id = 10
+    AND created_at >= @install_datetime
+    AND timestamp >= @install_datetime
+    AND deployment_id != 60;
     ```
 
+**Note:** The dual filter on both `created_at` and `timestamp` ensures we only update data that was actually collected after the new deployment, avoiding incorrectly reassigning manually uploaded historical data (e.g., from SD card backfill).
+
 **Example:**
-Box 9 moved to new location on Oct 31 at 11:59 UTC (new deployment_id = 45), but the deployment record wasn't added until Nov 5. All readings from Oct 31 - Nov 5 were written with the old deployment_id = 44. This query reassigns those ~7,200 readings to the correct deployment.
+Box 10 moved to new location on Mar 13, 2026 at 17:55 UTC (new deployment_id = 60), but the deployment record wasn't added until Mar 18. All readings from Mar 13-18 were written with the old deployment_id = 10. This query reassigns those ~7,200 readings to the correct deployment.
 
 ---
 
@@ -397,13 +405,116 @@ If other unresolved issues exist for this sensor, unflagging all quality_ok = 0 
 
 ---
 
-### Schema Modifications
+## Schema Modifications
 
-Schema changes (adding columns, creating indexes) are rare but occasionally needed. 
+Schema changes (adding columns, creating indexes) are rare but occasionally needed.
 
 **Before making changes:**
+
 - Test queries thoroughly before running on production database
 - Document what you're changing and why
 - Have rollback plan if something breaks
 
 **Contact research team or IT before making structural changes to the database.**
+
+---
+
+## User Access Management
+
+### Granting Database Access
+
+Before users can connect to the database, their Northeastern account must be granted appropriate permissions. Only technical administrators with database owner privileges can manage user access.
+
+**Permission Levels:**
+
+- **db_datareader:** Read-only access to all tables. Recommended for researchers who only need to query data.
+- **db_datawriter:** Can insert, update, and delete data. Use sparingly - only for users who need to modify data.
+- **db_owner:** Full control including schema changes. Reserved for technical administrators only.
+
+**Security principle:** Grant minimum necessary permissions. Most users should have db_datareader only.
+
+### Adding a New User
+
+**Prerequisites:**
+
+- User must have a Northeastern email account
+- You must have db_owner permissions
+- Connected to database through SSMS or Azure Data Studio
+
+**Procedure:**
+
+Connect to your database in SSMS, then run:
+
+    ```sql
+    -- Create user from Entra ID account
+    CREATE USER [user@northeastern.edu] FROM EXTERNAL PROVIDER;
+
+    -- Grant read-only access (most common)
+    ALTER ROLE db_datareader ADD MEMBER [user@northeastern.edu];
+    ```
+
+**For users needing write access** (use carefully):
+
+    ```sql
+    -- Grant write access in addition to read
+    ALTER ROLE db_datawriter ADD MEMBER [user@northeastern.edu];
+    ```
+
+**Verification:**
+
+Check user permissions:
+
+    ```sql
+    SELECT
+        dp.name AS UserName,
+        dp.type_desc AS UserType,
+        r.name AS RoleName
+    FROM sys.database_principals dp
+    LEFT JOIN sys.database_role_members drm ON dp.principal_id = drm.member_principal_id
+    LEFT JOIN sys.database_principals r ON drm.role_principal_id = r.principal_id
+    WHERE dp.name = '<user@northeastern.edu>';
+    ```
+
+### Revoking Access
+
+To remove a user's access entirely:
+
+    ```sql
+    -- Remove from all roles first
+    ALTER ROLE db_datareader DROP MEMBER [user@northeastern.edu];
+    ALTER ROLE db_datawriter DROP MEMBER [user@northeastern.edu];
+
+    -- Then drop the user
+    DROP USER [user@northeastern.edu];
+    ```
+
+To downgrade from write to read-only:
+
+    ```sql
+    -- Remove write permissions only
+    ALTER ROLE db_datawriter DROP MEMBER [user@northeastern.edu];
+    -- User retains db_datareader access
+    ```
+
+### Best Practices
+
+**Minimize write access:**
+Only grant db_datawriter to users who actively need to modify data. Most researchers should have read-only access.
+
+**Review current users:**
+Periodically check who has database access:
+
+    ```sql
+    SELECT 
+        name AS UserName,
+        type_desc AS UserType,
+        create_date AS CreatedDate
+    FROM sys.database_principals
+    WHERE type IN ('E', 'S', 'U')  -- E=External (Azure AD), S=SQL user, U=Windows user
+    ORDER BY name;
+    ```
+
+Review this list regularly and remove access for those who no longer need it (graduated students, completed projects, etc.).
+
+**After granting access:**
+Notify the user they can now connect following the procedures in [Connecting to Database](../02-working-with-data/database/connecting.md).
