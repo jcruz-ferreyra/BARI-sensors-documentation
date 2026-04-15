@@ -51,8 +51,8 @@ Set the old deployment to inactive and record when it was uninstalled:
     UPDATE nu_sensors
     SET 
         is_active = 0,
-        uninstall_datetime = '2025-11-07 00:00:00'  -- UTC timestamp when sensor was removed
-    WHERE box_id = 9 AND is_active = 1;
+        uninstall_datetime = '2026-03-13 16:52:00'  -- UTC timestamp when sensor was removed
+    WHERE box_id = 6 AND is_active = 1;
     ```
 
 **Step 2: Add the new deployment**
@@ -62,13 +62,13 @@ Insert the new deployment record with the new location details:
     ```sql
     INSERT INTO nu_sensors (box_id, location_id, coreid, location_address, latitude, longitude, install_datetime)
     VALUES (
-        9,                                    -- Same box_id
-        NULL,                                 -- location_id (optional, verify with the research team its value)
+        23,                                   -- Same box_id
+        6,                                    -- location_id (optional, verify with the research team its value)
         'e00fce68cd4bb76b1b85dbe7',           -- Particle device coreid
-        'Savin & Tupelo',                     -- New location address
-        42.31670,                             -- New latitude
-        -71.08095,                            -- New longitude
-        '2025-10-31 11:59:00'                 -- UTC timestamp when sensor installed at new location
+        'Waverly @ Warren',                   -- New location address
+        42.32144530,                          -- New latitude
+        -71.08203400,                         -- New longitude
+        '2026-03-13 12:55:00'                 -- UTC timestamp when sensor installed at new location
     );
     ```
 
@@ -97,6 +97,126 @@ You should see:
 **After Adding Deployment:**
 
 If data was already recorded under the old deployment_id after the sensor was moved, you'll need to update those readings. See [Updating deployment_id for Readings](#updating-deployment_id-for-readings) below.
+
+---
+
+### Deleting Incorrect Deployment Records
+
+**Scenario:** You accidentally inserted a deployment record with wrong information and need to delete it and start over.
+
+**Important:** Simply deleting a row from `nu_sensors` does NOT reset the auto-incrementing `deployment_id` counter. If you delete deployment_id 57 and insert a new record, it will become deployment_id 58, not 57.
+
+**Step 1: Delete the incorrect record**
+
+```sql
+DELETE FROM nu_sensors
+WHERE deployment_id = 57;  -- The incorrect record
+```
+
+**Step 2: Reset the identity counter**
+
+After deletion, reset the counter to the last valid deployment_id:
+
+```sql
+-- Check current identity value
+DBCC CHECKIDENT ('nu_sensors', NORESEED);
+
+-- Reset to last valid deployment_id (56 in this example)
+-- Next insertion will be 57
+DBCC CHECKIDENT ('nu_sensors', RESEED, 56);
+```
+
+**Verification:**
+
+Confirm the counter is set correctly:
+
+```sql
+-- Should show "Current identity value: 56, Current column value: 56"
+DBCC CHECKIDENT ('nu_sensors', NORESEED);
+
+-- Check the last actual record
+SELECT MAX(deployment_id) as last_deployment_id
+FROM nu_sensors;
+```
+
+**Notes:**
+
+- The RESEED value should be the highest existing deployment_id
+- If you RESEED to 56, the next INSERT will create deployment_id 57
+- Only use this immediately after deletion - don't reset the counter arbitrarily
+- This ensures deployment_id values remain sequential without gaps
+
+---
+
+## Timezone Conventions
+
+**All datetime columns in the database use UTC timezone.**
+
+This includes:
+
+- `nu_sensors.install_datetime`
+- `nu_sensors.uninstall_datetime`
+- `nu_sensors.created_at`
+- `nu_quality_issues.start_datetime`
+- `nu_quality_issues.end_datetime`
+- `nu_readings.timestamp`
+- `nu_readings.created_at`
+
+**Common Mistakes:**
+
+```sql
+-- WRONG: Using local Eastern time
+INSERT INTO nu_sensors (box_id, install_datetime)
+VALUES (23, '2026-03-13 12:55:00');  -- If this is EST, it's 5 hours off!
+
+-- CORRECT: Convert to UTC first
+-- If sensor was installed at 12:55 PM EST (UTC-5), use 17:55 UTC
+INSERT INTO nu_sensors (box_id, install_datetime)
+VALUES (23, '2026-03-13 17:55:00');
+```
+
+**Converting EST/EDT to UTC:**
+
+- EST (winter): Add 5 hours
+- EDT (summer): Add 4 hours
+
+**Example:**
+
+- Local time: March 13, 2026 at 12:55 PM EST
+- UTC time: March 13, 2026 at 17:55 (12:55 + 5 hours)
+
+**If you accidentally inserted EST timestamps:**
+
+Correct them by adding the appropriate offset:
+
+    ```sql
+    -- For winter timestamps (EST = UTC-5), add 5 hours
+    UPDATE nu_sensors
+    SET install_datetime = DATEADD(HOUR, 5, install_datetime)
+    WHERE deployment_id = 57
+    AND install_datetime < DATEADD(HOUR, 5, install_datetime);  -- Safety check
+
+    -- For summer timestamps (EDT = UTC-4), add 4 hours
+    UPDATE nu_sensors
+    SET install_datetime = DATEADD(HOUR, 4, install_datetime)
+    WHERE deployment_id = 58;
+    ```
+
+**Verification:**
+
+Check if your timestamps look reasonable for UTC (EST +5 hours):
+
+    ```sql
+    SELECT 
+        deployment_id,
+        box_id,
+        install_datetime,
+        DATEADD(HOUR, -5, install_datetime) as 'EST_equivalent'
+    FROM nu_sensors
+    WHERE deployment_id IN (57, 58);
+    ```
+
+The `EST_equivalent` column should match what you remember as the local installation time.
 
 ---
 

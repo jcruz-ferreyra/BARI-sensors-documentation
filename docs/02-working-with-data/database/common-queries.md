@@ -317,7 +317,8 @@ The `source_blob` field contains the arrival timestamp in its filename format: `
 ```sql
 SELECT *
 FROM nu_readings
-WHERE source_blob >= '23_20251107T05'
+WHERE box_id = 23  -- adding the box_id improves query performance (index)
+  AND source_blob >= '23_20251107T05'
   AND source_blob < '23_20251109T05';
 ```
 
@@ -328,9 +329,9 @@ This retrieves all readings from box 23 that arrived between November 7, 2025 05
 ```sql
 SELECT DISTINCT source_blob
 FROM nu_readings
-WHERE source_blob >= '23_20251107T05'
-  AND source_blob < '23_20251109T05'
-ORDER BY source_blob;
+WHERE box_id = 23  -- adding the box_id improves query performance (index)
+  AND source_blob >= '23_20251107T05'
+  AND source_blob < '23_20251109T05';
 ```
 
 **Format breakdown:**
