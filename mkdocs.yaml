@@ -50,6 +50,7 @@ extra:
     map_public: "https://www.commonsensesproject.org/live-sensor-data"
     heat_dashboard_public: "https://zealous-ocean-0968e670f.3.azurestaticapps.net/heat?deployment_id=5"
     noise_dashboard_public: "https://zealous-ocean-0968e670f.3.azurestaticapps.net/noise?deployment_id=5"
+    manual_tasks_repo: "https://www.github.com"
   
   dates:
     deployment_date: "December 2025"
