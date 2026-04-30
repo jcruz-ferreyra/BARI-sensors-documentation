@@ -328,7 +328,7 @@ When a sensor issue is fixed (hardware replaced, firmware updated, etc.), mark t
     ```sql
     UPDATE nu_quality_issues
     SET end_datetime = '2025-11-18 12:00:00'  -- UTC timestamp when issue was fixed
-    WHERE id = 5;
+    WHERE box_id = 5;  -- If the box has several quality issues use row 'id' instead of 'box_id'
     ```
 
 **Verification:**
@@ -338,7 +338,7 @@ The `is_resolved` computed column automatically updates to 1:
     ```sql
     SELECT id, box_id, issue_type, start_datetime, end_datetime, is_resolved
     FROM nu_quality_issues
-    WHERE id = 5;
+    WHERE box_id = 5;  -- If the box has several quality issues use row 'id' instead of 'box_id'
     ```
 
 You should see `is_resolved = 1` and `end_datetime` populated.
