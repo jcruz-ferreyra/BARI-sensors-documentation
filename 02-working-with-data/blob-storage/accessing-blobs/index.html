@@ -1,0 +1,2714 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Complete documentation for the Common SENSES sensor data pipeline">
+      
+      
+        <meta name="author" content="Juan Cruz">
+      
+      
+      
+        <link rel="prev" href="../../database/data-quality/">
+      
+      
+        <link rel="next" href="../blob-structure/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Accessing Blobs - BARI Environmental Sensor Network Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#accessing-blob-storage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="BARI Environmental Sensor Network Documentation" class="md-header__button md-logo" aria-label="BARI Environmental Sensor Network Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BARI Environmental Sensor Network Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Accessing Blobs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BARI Environmental Sensor Network Documentation" class="md-nav__button md-logo" aria-label="BARI Environmental Sensor Network Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BARI Environmental Sensor Network Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understanding the System
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Understanding the System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-understanding-the-system/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-understanding-the-system/data-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-understanding-the-system/networking-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-understanding-the-system/design-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Decisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with Data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working with Data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Database
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../database/connecting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connecting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../database/understanding-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understanding the Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../database/common-queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../database/data-quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blob Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blob Storage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accessing Blobs
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accessing Blobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#azure-storage-explorer-recommended-for-visual-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Azure Storage Explorer (Recommended for Visual Interaction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-scripts-recommended-for-bulk-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python Scripts (Recommended for Bulk Operations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#microsoft-entra-id-used-with-azure-storage-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microsoft Entra ID (Used with Azure Storage Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connection-string-used-with-python-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection String (Used with Python Scripts)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managed-identity-for-azure-resources-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managed Identity (For Azure Resources Only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Access
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#private-endpoint-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private Endpoint (Default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporary-public-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temporary Public Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enabling-temporary-public-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enabling Temporary Public Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blob-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blob Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating the System
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operating the System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/daily-checklist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Daily Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/monitoring-health/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring Health
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/cost-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/sensor-lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor Lifecycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/troubleshooting/sensor-not-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor Not Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/troubleshooting/function-errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/troubleshooting/database-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-operating-the-system/troubleshooting/dashboard-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Making Changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Making Changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-making-changes/deploying-code-updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploying Code Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-making-changes/updating-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updating Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-making-changes/database-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database Changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-making-changes/sensor-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-making-changes/infrastructure-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Azure Infrastructure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/azure-infrastructure/function-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/azure-infrastructure/sql-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/azure-infrastructure/blob-storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blob Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/azure-infrastructure/networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/azure-infrastructure/static-web-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Static Web App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/particle-platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Particle Platform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/complete-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complete Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/function-code-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Code Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-reference/api-endpoints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Endpoints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step-by-Step Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Step-by-Step Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-appendices/step-by-step-guides/create-sql-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create SQL Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-appendices/step-by-step-guides/configure-vnet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure VNet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-appendices/step-by-step-guides/deploy-function-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy Function App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-appendices/sql-query-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Query Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-appendices/error-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-appendices/contacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#azure-storage-explorer-recommended-for-visual-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Azure Storage Explorer (Recommended for Visual Interaction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-scripts-recommended-for-bulk-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python Scripts (Recommended for Bulk Operations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#microsoft-entra-id-used-with-azure-storage-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microsoft Entra ID (Used with Azure Storage Explorer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connection-string-used-with-python-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection String (Used with Python Scripts)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managed-identity-for-azure-resources-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managed Identity (For Azure Resources Only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Access
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#private-endpoint-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private Endpoint (Default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporary-public-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temporary Public Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enabling-temporary-public-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enabling Temporary Public Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="accessing-blob-storage">Accessing Blob Storage</h1>
+<p>This page covers how to connect to and interact with Azure Blob Storage for inspecting, downloading, uploading, or moving sensor data blobs. For the storage organization and folder structure, see <a href="../../../05-reference/azure-infrastructure/blob-storage/">Blob Storage Reference</a>.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p><strong>1. Azure Account Access</strong></p>
+<p>You need an Azure account with appropriate permissions to access the storage account resource. Unlike the database, blob storage access is typically reserved for technical administrators performing maintenance or data corrections — not for general research queries.</p>
+<p><strong>2. Authentication Method</strong></p>
+<p>One of the following:</p>
+<ul>
+<li><strong>Microsoft Entra ID (formerly Azure AD)</strong> - Uses your Azure organizational account (used with Azure Storage Explorer)</li>
+<li><strong>Managed Identity</strong> - Automatic authentication for Azure resources (used by Function Apps)</li>
+<li><strong>Connection String</strong> - Direct access key (used for local Python scripts)</li>
+</ul>
+<p>See <a href="#authentication-methods">Authentication Methods</a> below for detailed explanations.</p>
+<p><strong>3. Network Access</strong></p>
+<p>The storage account uses private networking by default. You need either:</p>
+<ul>
+<li>Access from within the Azure VNet (automatic for Azure resources)</li>
+<li>Temporary public access enabled from the Azure Portal (see <a href="#network-access">Network Access</a> below)</li>
+</ul>
+<p>For more details on the networking architecture, see <a href="../../../05-reference/azure-infrastructure/networking/">Networking Reference</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">Need Help?</p>
+<p>If you're unable to meet any of these prerequisites (Azure access, authentication setup, or network configuration), contact Juan Cruz (Database access, Azure resource management, troubleshooting).</p>
+</div>
+<hr />
+<h2 id="connection-methods">Connection Methods</h2>
+<p>Choose a connection method based on your task. Azure Storage Explorer is best for visual inspection and one-off operations, while Python scripts are better for repetitive or bulk tasks.</p>
+<h3 id="azure-storage-explorer-recommended-for-visual-interaction">Azure Storage Explorer (Recommended for Visual Interaction)</h3>
+<p><strong>What it is:</strong> Desktop application for browsing and managing Azure Storage resources with a visual file-explorer interface.</p>
+<p><strong>Best for:</strong> Inspecting blob contents, browsing folder structure, quick manual downloads or uploads, verifying pipeline behavior.</p>
+<p><strong>Who can use this:</strong> Technical administrators with Azure account access. Requires sign-in with Northeastern credentials through the application.</p>
+<p><strong>Download:</strong> <a href="https://azure.microsoft.com/en-us/products/storage/storage-explorer/">Azure Storage Explorer</a></p>
+<p><strong>Limitation:</strong> Not practical for bulk or scripted operations.</p>
+<details class="note">
+<summary>Step-by-Step: Installing and Connecting with Azure Storage Explorer</summary>
+<p><strong>Installation</strong></p>
+<p>Download and install from the link above. Available for Windows, Mac, and Linux.</p>
+<hr />
+<p><strong>Connecting to the Storage Account</strong></p>
+<p><strong>1. Sign In</strong></p>
+<p>When you first open Azure Storage Explorer, click "Connect to Azure resources" or use the plug icon in the left sidebar.</p>
+<p><img alt="Storage Explorer Connect Dialog" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_connect_dialog.jpg" /></p>
+<p>Select "Subscription" as the resource type, then sign in with your Northeastern Azure credentials.</p>
+<p><img alt="Storage Explorer Sign In" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_sign_in.jpg" /></p>
+<p><strong>2. Locate the Storage Account</strong></p>
+<p>After signing in, expand your subscription in the left panel. Navigate to: Storage Accounts → sensordatastprdue201 → Blob Containers → nu-sensor-data.</p>
+<p><img alt="Storage Explorer Navigation" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_navigation.jpg" /></p>
+<p><strong>3. Browse Folders</strong></p>
+<p>The folder structure mirrors the <a href="../../../05-reference/azure-infrastructure/blob-storage/#folder-structure">Blob Storage Reference</a>. Click into any folder to see its contents.</p>
+<p><img alt="Storage Explorer Folder Structure" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_folder_structure.jpg" /></p>
+<hr />
+<p><strong>Common Operations</strong></p>
+<p><strong>Viewing Blob Contents</strong></p>
+<p>Double-click any blob to download and open it. JSON files open in your default text editor.</p>
+<p><img alt="Storage Explorer Blob Preview" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_blob_preview.jpg" /></p>
+<p><strong>Downloading Blobs</strong></p>
+<p>Select one or more blobs → Click "Download" in the toolbar → Choose destination folder.</p>
+<p><img alt="Storage Explorer Download" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_download.jpg" /></p>
+<p><strong>Uploading Blobs</strong></p>
+<p>Navigate to the target folder → Click "Upload" → Select files from your computer.</p>
+<p><img alt="Storage Explorer Upload" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/explorer_upload.jpg" /></p>
+<p><strong>Moving Blobs</strong></p>
+<p>Azure Storage Explorer does not support moving blobs directly. To move a blob, download it, upload it to the new location, then delete the original. For bulk moves, use the <a href="#python-scripts-recommended-for-bulk-operations">Python scripts</a> instead.</p>
+<hr />
+<p>See <a href="#network-access">Network Access</a> for enabling public access before connecting.</p>
+</details>
+<div style="margin-top: 2rem;"></div>
+
+<h3 id="python-scripts-recommended-for-bulk-operations">Python Scripts (Recommended for Bulk Operations)</h3>
+<p><strong>What it is:</strong> Python scripts using the <code>azure-storage-blob</code> SDK to interact with blob storage programmatically. The project maintains a repository of common maintenance scripts for this purpose.</p>
+<p><strong>Best for:</strong> Bulk uploads, batch downloads, moving blobs between folders, any repetitive or scriptable task.</p>
+<p><strong>Who can use this:</strong> Anyone comfortable with Python programming who has the storage account connection string.</p>
+<p><strong>Repository:</strong> <a href="https://www.github.com">Manual Tasks Repository</a> (private — requires organization GitHub access)</p>
+<p><strong>Installation:</strong> <code>pip install azure-storage-blob python-dotenv</code></p>
+<p><strong>Example tasks the scripts handle:</strong></p>
+<ul>
+<li>Uploading blobs from text files collected manually from sensor SD cards into the <code>incoming/</code> folder for database processing</li>
+<li>Downloading blobs matching a pattern (for example, all blobs for a specific box_id from a specific folder)</li>
+<li>Moving blobs from one folder to another (for example, moving blobs from <code>failed-processing/</code> back to <code>incoming/</code> after investigating an issue)</li>
+</ul>
+<details class="note">
+<summary>Step-by-Step: Setting Up Python Blob Access</summary>
+<p><strong>1. Clone the Manual Tasks Repository</strong></p>
+<p>Clone the repository from the organization's GitHub account. The repository contains ready-to-use scripts for common blob operations.</p>
+<p><strong>2. Create a <code>.env</code> File</strong></p>
+<p>In the repository root, create a file named <code>.env</code> and add the storage account connection string:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net
+</code></pre></div>
+<p>The connection string can be found in Azure Portal → Storage Account → Access keys.</p>
+<p><img alt="Azure Portal Access Keys" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/portal_access_keys.jpg" /></p>
+<p><strong>3. Verify <code>.env</code> Is in <code>.gitignore</code></strong></p>
+<p>The <code>.env</code> file contains the full connection string which grants direct access to the storage account. Confirm that <code>.env</code> is listed in the repository's <code>.gitignore</code> file so it is never committed to version control.</p>
+<p><strong>4. Enable Public Access</strong></p>
+<p>Before running scripts from your local machine, enable temporary public access on the storage account and add your IP to the firewall. See <a href="#network-access">Network Access</a> below.</p>
+<p><strong>5. Run a Script</strong></p>
+<p>Each script in the repository uses <code>argparse</code> for command-line arguments. Run with <code>--help</code> to see available options.</p>
+</details>
+<div class="admonition warning">
+<p class="admonition-title">Environment Variables and Secrets</p>
+<p>The connection string provides full access to the storage account — anyone who has it can read, write, and delete blobs. This is why environment variables and <code>.env</code> files are used: they keep secrets out of your code and out of version control. For a quick primer on why this matters and how <code>.env</code> files work, see <a href="https://pypi.org/project/python-dotenv/">python-dotenv documentation</a>.</p>
+<p><strong>Never commit <code>.env</code> files or connection strings to Git.</strong> If a connection string is accidentally exposed, rotate the storage account keys immediately in the Azure Portal.</p>
+</div>
+<hr />
+<h2 id="authentication-methods">Authentication Methods</h2>
+<p>The storage account supports three authentication methods. Choose based on your use case.</p>
+<h3 id="microsoft-entra-id-used-with-azure-storage-explorer">Microsoft Entra ID (Used with Azure Storage Explorer)</h3>
+<p>Uses your Northeastern Azure credentials to authenticate through Azure Storage Explorer. Access depends on the role assignments configured for your account on the storage account resource.</p>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li>No keys or passwords to manage locally</li>
+<li>Permissions tied to your organizational account</li>
+<li>Access automatically revoked when leaving organization</li>
+</ul>
+<p><strong>Limitation:</strong> Currently, the storage account is configured for technical administrator access. Reader-level role assignments for other team members have not been set up, since blob storage interaction is primarily a maintenance activity.</p>
+<p><strong>How to connect:</strong> Follow the <a href="#azure-storage-explorer-recommended-for-visual-interaction">Azure Storage Explorer steps</a> above.</p>
+<h3 id="connection-string-used-with-python-scripts">Connection String (Used with Python Scripts)</h3>
+<p>A connection string containing the storage account access key. Provides full read/write access to all containers and blobs.</p>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li>Simple setup for local scripts</li>
+<li>Works with the <code>azure-storage-blob</code> Python SDK</li>
+<li>No Azure CLI or browser sign-in required</li>
+</ul>
+<p><strong>Risks:</strong></p>
+<ul>
+<li>The connection string grants full access — treat it like a password</li>
+<li>Must be stored in <code>.env</code> files, never in code or version control</li>
+<li>If exposed, rotate storage account keys immediately</li>
+</ul>
+<p><strong>How to connect:</strong> Follow the <a href="#python-scripts-recommended-for-bulk-operations">Python scripts setup steps</a> above.</p>
+<h3 id="managed-identity-for-azure-resources-only">Managed Identity (For Azure Resources Only)</h3>
+<p>Azure resources within the same VNet (Function Apps) authenticate automatically without storing credentials. This is how the Webhook Receiver and Database Writer access blob storage in production.</p>
+<p><strong>How it works:</strong> The Function App's managed identity is granted the appropriate role on the storage account. Combined with private endpoint access through the VNet, the function connects without any keys or connection strings in code.</p>
+<p><strong>Configuration:</strong> See <a href="../../../05-reference/azure-infrastructure/function-apps/#authentication">Function Apps - Authentication</a> for setup details.</p>
+<div class="admonition warning">
+<p class="admonition-title">Network Access Required</p>
+<p>Both Microsoft Entra ID and Connection String authentication require network connectivity to the storage account. If public network access is disabled (default), connections from outside Azure will fail regardless of authentication method.</p>
+<p>See <a href="#network-access">Network Access</a> below and <a href="../../../05-reference/azure-infrastructure/networking/">Networking Reference</a> for details on enabling temporary public access.</p>
+<p><strong>Exception:</strong> Managed Identity works through private endpoints and does not require public access.</p>
+</div>
+<hr />
+<h2 id="network-access">Network Access</h2>
+<p>The storage account uses private networking by default, restricting connections to Azure resources within the same Virtual Network (VNet). The same concept applies here as with the <a href="connecting.md#network-access">database</a> — public access must be temporarily enabled when working from a local machine.</p>
+<h3 id="private-endpoint-default">Private Endpoint (Default)</h3>
+<p><strong>What it means:</strong> The storage account is only accessible from within Azure's internal network.</p>
+<p><strong>Who can connect:</strong></p>
+<ul>
+<li>Azure Function Apps (automatically — they're in the VNet)</li>
+<li>Other Azure resources configured in the same VNet</li>
+</ul>
+<p><strong>Who cannot connect:</strong></p>
+<ul>
+<li>Your laptop/desktop computer</li>
+<li>Azure Storage Explorer running locally</li>
+<li>Python scripts running on your local machine</li>
+</ul>
+<p>For complete networking architecture details, see <a href="../../../05-reference/azure-infrastructure/networking/">Networking Reference</a>.</p>
+<h3 id="temporary-public-access">Temporary Public Access</h3>
+<p>To connect from your computer (whether through Azure Storage Explorer or Python scripts), you need to temporarily enable public network access.</p>
+<p><strong>Security implications:</strong></p>
+<ul>
+<li>Opens storage account to internet connections (with firewall restrictions)</li>
+<li>Should only be enabled when actively working with blobs</li>
+<li>Must be disabled immediately after use</li>
+<li>Always restrict access to your specific IP address only</li>
+</ul>
+<h3 id="enabling-temporary-public-access">Enabling Temporary Public Access</h3>
+<details class="note">
+<summary>Step-by-Step: Enable Public Access for Storage Account</summary>
+<ol>
+<li>Navigate to Azure Portal → Storage Account (sensordatastprdue201)</li>
+<li>Select "Networking" from the left sidebar under "Security + networking"</li>
+<li>Under "Public network access" → Select "Enabled from selected virtual networks and IP addresses"</li>
+<li>Under "Firewall" → Click "Add your client IP address"</li>
+<li>Click "Save"</li>
+</ol>
+<p><img alt="Storage Account Networking Settings" src="../../images/screenshots/02-working-with-data/blob-storage/accessing/portal_networking_settings.jpg" /></p>
+<p><strong>To disable:</strong> Return to same page, select "Disabled" under "Public network access", click "Save"</p>
+</details>
+<p>For detailed instructions with screenshots, see <a href="../../06-appendices/step-by-step-guides/configure-network-access.md">Appendix: Network Configuration</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Remember to Disable</p>
+<p>Always disable public access when finished. Leaving it enabled creates unnecessary security exposure — especially for blob storage, where the connection string grants full read/write access.</p>
+</div>
+<!-- Here's a summary of the 9 screenshot placeholders you'll need to capture, all under images/screenshots/02-working-with-data/blob-storage/accessing/:
+
+explorer_connect_dialog.jpg — The "Connect to Azure resources" dialog
+explorer_sign_in.jpg — Subscription selection and Entra sign-in flow
+explorer_navigation.jpg — Left panel expanded to nu-sensor-data container
+explorer_folder_structure.jpg — Folder listing inside the container
+explorer_blob_preview.jpg — A blob opened/previewed showing JSON contents
+explorer_download.jpg — Download toolbar action with blob(s) selected
+explorer_upload.jpg — Upload dialog
+portal_access_keys.jpg — Azure Portal Storage Account → Access keys page
+portal_networking_settings.jpg — Azure Portal Storage Account → Networking page with firewall settings -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.indexes", "navigation.top", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

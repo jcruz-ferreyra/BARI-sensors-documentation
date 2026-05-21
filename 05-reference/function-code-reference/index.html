@@ -1,0 +1,3538 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Complete documentation for the Common SENSES sensor data pipeline">
+      
+      
+        <meta name="author" content="Juan Cruz">
+      
+      
+      
+        <link rel="prev" href="../complete-schema/">
+      
+      
+        <link rel="next" href="../api-endpoints/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Function Code Reference - BARI Environmental Sensor Network Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#function-code-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BARI Environmental Sensor Network Documentation" class="md-header__button md-logo" aria-label="BARI Environmental Sensor Network Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BARI Environmental Sensor Network Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Function Code Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BARI Environmental Sensor Network Documentation" class="md-nav__button md-logo" aria-label="BARI Environmental Sensor Network Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BARI Environmental Sensor Network Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understanding the System
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Understanding the System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-understanding-the-system/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-understanding-the-system/data-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-understanding-the-system/networking-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-understanding-the-system/design-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Decisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with Data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working with Data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Database
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/database/connecting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connecting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/database/understanding-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understanding the Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/database/common-queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/database/data-quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blob Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blob Storage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/blob-storage/accessing-blobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accessing Blobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-working-with-data/blob-storage/blob-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blob Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating the System
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operating the System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/daily-checklist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Daily Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/monitoring-health/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring Health
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/cost-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/sensor-lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor Lifecycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/troubleshooting/sensor-not-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor Not Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/troubleshooting/function-errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/troubleshooting/database-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-operating-the-system/troubleshooting/dashboard-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Making Changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Making Changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-making-changes/deploying-code-updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploying Code Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-making-changes/updating-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updating Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-making-changes/database-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database Changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-making-changes/sensor-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-making-changes/infrastructure-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Azure Infrastructure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../azure-infrastructure/function-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../azure-infrastructure/sql-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../azure-infrastructure/blob-storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blob Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../azure-infrastructure/networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../azure-infrastructure/static-web-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Static Web App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../particle-platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Particle Platform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../complete-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complete Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Code Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Code Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensordata-func-sensor-rec-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sensordata-func-sensor-rec-...
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sensordata-func-sensor-rec-...">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blob-storage-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blob Storage Interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duplicate-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duplicate Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alert-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alert Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensordata-func-db-writer-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sensordata-func-db-writer-...
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sensordata-func-db-writer-...">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database_populator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        database_populator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="database_populator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#daily_report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        daily_report
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="daily_report">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-interaction_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-notes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensordata-func-api-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sensordata-func-api-...
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sensordata-func-api-...">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main Endpoints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apilocation-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/location-metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apireadings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/readings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apisensors-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/sensors-list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apihealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/health
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cors-and-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CORS and Caching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-notes_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permission-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permission Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code Organization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operational-behavior-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operational Behavior Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-endpoints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Endpoints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step-by-Step Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Step-by-Step Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-appendices/step-by-step-guides/create-sql-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create SQL Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-appendices/step-by-step-guides/configure-vnet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure VNet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-appendices/step-by-step-guides/deploy-function-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy Function App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-appendices/sql-query-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Query Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-appendices/error-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-appendices/contacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensordata-func-sensor-rec-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sensordata-func-sensor-rec-...
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sensordata-func-sensor-rec-...">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blob-storage-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blob Storage Interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duplicate-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duplicate Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alert-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alert Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensordata-func-db-writer-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sensordata-func-db-writer-...
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sensordata-func-db-writer-...">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database_populator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        database_populator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="database_populator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#daily_report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        daily_report
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="daily_report">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-interaction_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-notes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensordata-func-api-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sensordata-func-api-...
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sensordata-func-api-...">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main Endpoints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apilocation-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/location-metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apireadings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/readings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apisensors-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/sensors-list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apihealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/health
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cors-and-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CORS and Caching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-notes_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permission-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permission Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code Organization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operational-behavior-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operational Behavior Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="function-code-reference">Function Code Reference</h1>
+<p>This page documents the Azure Function Apps used by the sensor data pipeline. It explains what each Function App does, which resources it can access, and how the functions interact with Blob Storage, SQL Database, and the public dashboard.</p>
+<p>For deployment procedures, see <a href="../../04-making-changes/deploying-code-updates/">Deploying Code Updates</a>. For Azure resource configuration, see <a href="../azure-infrastructure/function-apps/">Function Apps Infrastructure Reference</a>.</p>
+<h2 id="overview">Overview</h2>
+<p>The system uses three main Function App resources:</p>
+<table>
+<thead>
+<tr>
+<th>Function App</th>
+<th>Main Role</th>
+<th>Trigger Type</th>
+<th>Access Level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sensordata-func-sensor-rec-...</code></td>
+<td>Receives Particle webhook payloads and writes parsed data to Blob Storage</td>
+<td>HTTP</td>
+<td>Public endpoint, Blob Storage write access</td>
+</tr>
+<tr>
+<td><code>sensordata-func-db-writer-...</code></td>
+<td>Processes blobs, writes records to SQL Database, and sends daily reports</td>
+<td>Timer</td>
+<td>Private/internal, Blob Storage read/write, SQL read/write</td>
+</tr>
+<tr>
+<td><code>sensordata-func-api-...</code></td>
+<td>Serves dashboard API requests from SQL Database</td>
+<td>HTTP</td>
+<td>Public endpoint, SQL read access</td>
+</tr>
+</tbody>
+</table>
+<p>Each Function App may contain one or more individual Azure Functions. The code is organized so each Function App has a narrow responsibility and only the permissions needed for that responsibility.</p>
+<hr />
+<h2 id="sensordata-func-sensor-rec-"><code>sensordata-func-sensor-rec-...</code></h2>
+<p>The sensor receiver Function App is the public ingestion point for Particle.io webhook messages. It receives raw sensor payloads, validates the request, parses the payload, checks for duplicates and alert conditions, then writes the parsed result to Blob Storage.</p>
+<h3 id="functions">Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Route</th>
+<th>Trigger</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>webhook_handler</code></td>
+<td><code>/api/webhook</code></td>
+<td>HTTP POST</td>
+<td>Receives Particle webhook payloads and writes parsed blobs to storage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="responsibilities">Responsibilities</h3>
+<p>The webhook receiver is responsible for:</p>
+<ul>
+<li>Accepting HTTP POST requests from Particle Cloud</li>
+<li>Validating required Particle webhook fields</li>
+<li>Parsing the raw <code>data</code> field into a classified payload</li>
+<li>Detecting duplicate webhook deliveries</li>
+<li>Checking whether an operational alert should be sent</li>
+<li>Writing parsed JSON blobs to Blob Storage</li>
+<li>Returning a JSON response to Particle Cloud</li>
+</ul>
+<h3 id="input">Input</h3>
+<p>The function expects a Particle-style JSON payload containing at least:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;event-name&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;raw-sensor-message&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;coreid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;particle-device-id&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;published_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;particle-published-timestamp&gt;&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>Optional fields may also be present in the webhook payload, but these four fields are required for processing.</p>
+<h3 id="output">Output</h3>
+<p>If processing succeeds, the function writes a JSON blob to the appropriate Blob Storage folder and returns:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;received&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;box_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;box-id-or-unknown&gt;&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>If the message is detected as a duplicate, it returns:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;duplicate&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
+</code></pre></div>
+<p>Invalid JSON or missing required keys return HTTP 400. Blob connection or upload failures return HTTP 500.</p>
+<h3 id="blob-storage-interaction">Blob Storage Interaction</h3>
+<p>This Function App writes to Blob Storage but does not interact with the SQL Database directly.</p>
+<p>The parsed payload is routed by message type:</p>
+<ul>
+<li><code>environment/</code></li>
+<li><code>error/</code></li>
+<li><code>startup/</code></li>
+<li><code>unknown/</code></li>
+</ul>
+<p>For recognized message types, complete and well-formed messages are written to <code>incoming/</code>. Recognizable but malformed messages are written to <code>malformed/</code>. Unknown messages are written directly to the <code>unknown/</code> folder.</p>
+<h3 id="duplicate-detection">Duplicate Detection</h3>
+<p>The receiver includes webhook-level duplicate detection using the raw <code>data</code> field and the Particle <code>coreid</code>.</p>
+<p>This mechanism exists because duplicate webhook deliveries can occur if Particle integrations are accidentally configured at multiple levels. When active, duplicate messages are rejected before being written to Blob Storage.</p>
+<h3 id="alert-handling">Alert Handling</h3>
+<p>The function checks whether the parsed payload should trigger an operational alert. Alerts may be generated for malformed data, unknown formats, high latency, or upload errors.</p>
+<p>Alert logs are stored in Blob Storage so repeated alerts from the same sensor can be rate-limited.</p>
+<h3 id="design-notes">Design Notes</h3>
+<p>The webhook receiver is intentionally lightweight. It validates and stores incoming data but does not write directly to the database. This design keeps ingestion resilient: if the database is unavailable, incoming data can still be preserved in Blob Storage and processed later by the Database Writer.</p>
+<hr />
+<h2 id="sensordata-func-db-writer-"><code>sensordata-func-db-writer-...</code></h2>
+<p>The database writer Function App performs scheduled backend processing. It reads blobs from Blob Storage, validates and transforms them, writes records to SQL Database, moves processed blobs to their final folders, and sends operational reports.</p>
+<h3 id="functions_1">Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Trigger</th>
+<th>Schedule</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>database_populator</code></td>
+<td>Timer</td>
+<td>Every 30 minutes</td>
+<td>Processes incoming blobs and writes records to SQL Database</td>
+</tr>
+<tr>
+<td><code>daily_report</code></td>
+<td>Timer</td>
+<td>Daily at 6:00 UTC</td>
+<td>Sends previous-day sensor performance report</td>
+</tr>
+</tbody>
+</table>
+<h3 id="database_populator"><code>database_populator</code></h3>
+<p>The <code>database_populator</code> function is the main processing function for the pipeline.</p>
+<h4 id="responsibilities_1">Responsibilities</h4>
+<p>This function is responsible for:</p>
+<ul>
+<li>Connecting to Blob Storage</li>
+<li>Connecting to SQL Database</li>
+<li>Loading active sensor deployment mappings</li>
+<li>Reading blobs from <code>incoming/</code></li>
+<li>Processing <code>environment</code>, <code>error</code>, and <code>startup</code> data separately</li>
+<li>Detecting duplicate blobs within the current batch</li>
+<li>Validating and transforming blob contents into database records</li>
+<li>Writing records to the appropriate SQL tables</li>
+<li>Moving blobs to <code>archived/</code>, <code>duplicated/</code>, <code>failed-processing/</code>, or <code>failed-writing/</code></li>
+<li>Sending alerts when processing, writing, or blob movement fails</li>
+</ul>
+<h4 id="processing-flow">Processing Flow</h4>
+<p>For each data type (<code>environment</code>, <code>error</code>, <code>startup</code>), the function follows this sequence:</p>
+<ol>
+<li>Read blobs from the corresponding <code>incoming/</code> folder.</li>
+<li>Detect duplicate blobs within the current batch.</li>
+<li>Move duplicated blobs to <code>duplicated/</code>.</li>
+<li>Process valid blobs into database-ready records.</li>
+<li>Move blobs that fail validation to <code>failed-processing/</code>.</li>
+<li>Write successfully processed records to SQL Database.</li>
+<li>Move successfully written blobs to <code>archived/</code>.</li>
+<li>Move blobs with database integrity conflicts to <code>failed-writing/</code>.</li>
+<li>Leave blobs in <code>incoming/</code> if a network/database connection error occurs, so they can be retried on the next run.</li>
+</ol>
+<h4 id="database-interaction">Database Interaction</h4>
+<p>This Function App has both read and write access to the SQL Database.</p>
+<p>It reads from:</p>
+<ul>
+<li><code>nu_sensors</code></li>
+<li><code>nu_quality_issues</code></li>
+<li>diagnostic queries used by the daily report</li>
+</ul>
+<p>It writes to:</p>
+<ul>
+<li><code>nu_readings</code></li>
+<li><code>nu_errors</code></li>
+<li><code>nu_startup</code></li>
+</ul>
+<p>The function uses the active deployment mapping from <code>nu_sensors</code> to assign each incoming reading to the correct <code>deployment_id</code>.</p>
+<h4 id="error-handling">Error Handling</h4>
+<p>The function distinguishes between recoverable and non-recoverable failures.</p>
+<p>Network or connection failures leave blobs in <code>incoming/</code> so the next scheduled run can retry them.</p>
+<p>Validation or integrity problems move blobs out of <code>incoming/</code> to avoid repeated failures:</p>
+<ul>
+<li><code>failed-processing/</code> for parsing, validation, or timestamp overlap problems detected before database insertion</li>
+<li><code>failed-writing/</code> for records that pass processing but fail during database insertion</li>
+<li><code>duplicated/</code> for duplicate blobs within the processing batch</li>
+</ul>
+<h3 id="daily_report"><code>daily_report</code></h3>
+<p>The <code>daily_report</code> function sends a daily operational summary to the research team.</p>
+<h4 id="responsibilities_2">Responsibilities</h4>
+<p>This function is responsible for:</p>
+<ul>
+<li>Calculating the previous day’s reporting window in Eastern Time</li>
+<li>Querying the database for records written during that period</li>
+<li>Identifying sensors with missing or underperforming data</li>
+<li>Including uninstalled sensors in the summary</li>
+<li>Sending a daily email report</li>
+</ul>
+<h4 id="database-interaction_1">Database Interaction</h4>
+<p>This function only reads from the database. It does not modify sensor data.</p>
+<p>Typical report content includes:</p>
+<ul>
+<li>Total records written</li>
+<li>Records written per sensor</li>
+<li>Sensors with no data</li>
+<li>Underperforming sensors</li>
+<li>Uninstalled sensors</li>
+<li>Largest data gaps or sensor health indicators, depending on report configuration</li>
+</ul>
+<h3 id="design-notes_1">Design Notes</h3>
+<p>The Database Writer is separated from the Webhook Receiver so database outages do not cause immediate data loss. Blob Storage acts as a durable queue between ingestion and database insertion.</p>
+<p>Processing each data type separately also limits failure scope. A problem with one type of data does not necessarily block processing of the others.</p>
+<hr />
+<h2 id="sensordata-func-api-"><code>sensordata-func-api-...</code></h2>
+<p>The API Function App serves the public dashboard. It exposes HTTP endpoints that query the SQL Database and return JSON responses to the frontend.</p>
+<h3 id="functions_2">Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Route</th>
+<th>Trigger</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>location_metadata</code></td>
+<td><code>/api/location-metadata</code></td>
+<td>HTTP GET</td>
+<td>Returns metadata for a selected sensor location</td>
+</tr>
+<tr>
+<td><code>readings</code></td>
+<td><code>/api/readings</code></td>
+<td>HTTP GET</td>
+<td>Returns sensor readings for a metric, location, time range, and aggregation level</td>
+</tr>
+<tr>
+<td><code>sensors_list</code></td>
+<td><code>/api/sensors-list</code></td>
+<td>HTTP GET</td>
+<td>Returns available sensor locations for dashboard selection</td>
+</tr>
+<tr>
+<td><code>health_check</code></td>
+<td><code>/api/health</code></td>
+<td>HTTP GET</td>
+<td>Returns basic service health status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="responsibilities_3">Responsibilities</h3>
+<p>The API Function App is responsible for:</p>
+<ul>
+<li>Accepting dashboard requests</li>
+<li>Validating query parameters</li>
+<li>Connecting to SQL Database</li>
+<li>Running read-only queries</li>
+<li>Formatting responses as JSON</li>
+<li>Returning appropriate HTTP status codes</li>
+<li>Setting CORS headers for browser access</li>
+<li>Applying short browser cache headers where appropriate</li>
+</ul>
+<h3 id="database-access">Database Access</h3>
+<p>This Function App should have read-only access to the SQL Database.</p>
+<p>It queries:</p>
+<ul>
+<li><code>nu_sensors</code></li>
+<li><code>nu_readings</code></li>
+</ul>
+<p>It does not write to the database or interact with Blob Storage.</p>
+<h3 id="main-endpoints">Main Endpoints</h3>
+<h4 id="apilocation-metadata"><code>/api/location-metadata</code></h4>
+<p>Returns metadata for a specific location.</p>
+<p>Expected query parameter:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>location_id
+</code></pre></div>
+<p>Used by the dashboard to display location-specific information.</p>
+<h4 id="apireadings"><code>/api/readings</code></h4>
+<p>Returns time-series sensor readings.</p>
+<p>Expected query parameters:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>location_id
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>metric
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>start_date
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>end_date
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>aggregation
+</code></pre></div>
+<p>Supported metrics include:</p>
+<ul>
+<li><code>temperature</code></li>
+<li><code>humidity</code></li>
+<li><code>heat_index</code></li>
+<li><code>noise</code></li>
+</ul>
+<p>Supported aggregation levels depend on implementation, but typically include raw/minute-level, hourly, and daily views.</p>
+<h4 id="apisensors-list"><code>/api/sensors-list</code></h4>
+<p>Returns the list of available sensor locations. This endpoint is used to populate dashboard selectors.</p>
+<h4 id="apihealth"><code>/api/health</code></h4>
+<p>Returns a basic health check response:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;utc-timestamp&gt;&quot;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="cors-and-caching">CORS and Caching</h3>
+<p>The API includes CORS headers so the public dashboard can call the endpoints from the browser.</p>
+<p>Some endpoints also include cache headers:</p>
+<ul>
+<li>Readings responses are cached briefly to reduce repeated database queries.</li>
+<li>Sensor list responses can be cached longer because location metadata changes less frequently.</li>
+</ul>
+<h3 id="design-notes_2">Design Notes</h3>
+<p>The API Function App is separated from the ingestion and processing functions to keep public dashboard traffic isolated from backend processing. It has only the permissions required to serve read-only data.</p>
+<hr />
+<h2 id="permission-model">Permission Model</h2>
+<p>The three Function Apps follow a least-privilege design.</p>
+<table>
+<thead>
+<tr>
+<th>Function App</th>
+<th>Blob Storage</th>
+<th>SQL Database</th>
+<th>Public Access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sensor Receiver</td>
+<td>Write/read for ingestion, duplicate tracking, and alert logs</td>
+<td>None</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Database Writer</td>
+<td>Read/write</td>
+<td>Read/write</td>
+<td>No</td>
+</tr>
+<tr>
+<td>API</td>
+<td>None</td>
+<td>Read-only</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>This separation limits the impact of failures or exposed endpoints. Public-facing functions do not have unnecessary write permissions to the database.</p>
+<hr />
+<h2 id="code-organization">Code Organization</h2>
+<p>The Function App entry points are defined in <code>function_app.py</code>. Shared logic is organized into helper modules by responsibility.</p>
+<p>Common module groups include:</p>
+<table>
+<thead>
+<tr>
+<th>Module Area</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>blob_storage/</code></td>
+<td>Blob connection, upload, read, and move operations</td>
+</tr>
+<tr>
+<td><code>database/</code></td>
+<td>SQL connection, read queries, and write operations</td>
+</tr>
+<tr>
+<td><code>shared/parse.py</code></td>
+<td>Payload and query parameter parsing</td>
+</tr>
+<tr>
+<td><code>shared/process.py</code></td>
+<td>Transformation of parsed blobs into database-ready records</td>
+</tr>
+<tr>
+<td><code>shared/alert.py</code></td>
+<td>Operational alert generation</td>
+</tr>
+<tr>
+<td><code>shared/report.py</code></td>
+<td>Daily report formatting and email delivery</td>
+</tr>
+<tr>
+<td><code>shared/duplicated.py</code> or <code>shared/duplicate.py</code></td>
+<td>Duplicate detection logic</td>
+</tr>
+<tr>
+<td><code>shared/format.py</code></td>
+<td>API response formatting</td>
+</tr>
+<tr>
+<td><code>shared/utils.py</code></td>
+<td>Shared date/time and helper utilities</td>
+</tr>
+</tbody>
+</table>
+<p>The actual function files contain inline comments for implementation-level details. This reference page is intended to explain the role and behavior of each Function App, not replace the source code.</p>
+<hr />
+<h2 id="operational-behavior-summary">Operational Behavior Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Expected Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Particle sends valid sensor data</td>
+<td>Webhook Receiver writes parsed blob to <code>incoming/</code></td>
+</tr>
+<tr>
+<td>Duplicate webhook payload received</td>
+<td>Webhook Receiver returns duplicate status and does not write a new blob</td>
+</tr>
+<tr>
+<td>Blob is valid and database write succeeds</td>
+<td>Database Writer writes records and moves blob to <code>archived/</code></td>
+</tr>
+<tr>
+<td>Blob fails validation</td>
+<td>Database Writer moves blob to <code>failed-processing/</code></td>
+</tr>
+<tr>
+<td>Blob conflicts with existing database records</td>
+<td>Database Writer moves blob to <code>failed-writing/</code></td>
+</tr>
+<tr>
+<td>Database is temporarily unavailable</td>
+<td>Database Writer leaves blobs in <code>incoming/</code> for retry</td>
+</tr>
+<tr>
+<td>Dashboard requests data</td>
+<td>API validates request, queries SQL, and returns JSON</td>
+</tr>
+<tr>
+<td>API cannot connect to database</td>
+<td>API returns service unavailable response</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documentation">Related Documentation</h2>
+<ul>
+<li><a href="../../01-understanding-the-system/data-flow/">Data Flow</a></li>
+<li><a href="../azure-infrastructure/blob-storage/">Blob Storage Reference</a></li>
+<li><a href="../complete-schema/">Complete Schema Reference</a></li>
+<li><a href="../api-endpoints/">API Endpoints Reference</a></li>
+<li><a href="../../04-making-changes/deploying-code-updates/">Deploying Code Updates</a></li>
+<li><a href="../azure-infrastructure/networking/">Networking Reference</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.top", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
