@@ -31,63 +31,71 @@ When a sensor is moved to a new location, you need to close the previous deploym
 **Prerequisites:**
 
 - Know the box_id of the sensor being moved
-- Have the new location details (address, coordinates, coreid)
+- Have the new location details (address, coordinates)
 - Have the exact install_datetime for the new location
 - Have the uninstall_datetime for the previous location
 
 **Constraints:**
 
 - Only one deployment per box_id can have `is_active = 1` at a time (enforced by unique index)
-- The `deployment_id` is auto-incrementing and cannot be manually assigned
+- The `deployment_id` must be assigned manually — check the current maximum before inserting
 - You cannot add a new active deployment if the previous one is still marked `is_active = 1`
 
 **Procedure:**
+
+**Step 0: Check the next available deployment_id**
+
+```sql
+SELECT MAX(deployment_id) AS last_deployment_id
+FROM nu_deployments;
+```
+
+Use `last_deployment_id + 1` as your new `deployment_id` in Step 2.
 
 **Step 1: Close the previous deployment**
 
 Set the old deployment to inactive and record when it was uninstalled:
 
-    ```sql
-    UPDATE nu_sensors
-    SET 
-        is_active = 0,
-        uninstall_datetime = '2026-03-13 16:52:00'  -- UTC timestamp when sensor was removed
-    WHERE box_id = 6 AND is_active = 1;
-    ```
+```sql
+UPDATE nu_deployments
+SET 
+    is_active = 0,
+    uninstall_datetime = '2026-03-13 16:52:00'  -- UTC timestamp when sensor was removed
+WHERE box_id = 6 AND is_active = 1;
+```
 
 **Step 2: Add the new deployment**
 
 Insert the new deployment record with the new location details:
 
-    ```sql
-    INSERT INTO nu_sensors (box_id, location_id, coreid, location_address, latitude, longitude, install_datetime)
-    VALUES (
-        23,                                   -- Same box_id
-        6,                                    -- location_id (optional, verify with the research team its value)
-        'e00fce68cd4bb76b1b85dbe7',           -- Particle device coreid
-        'Waverly @ Warren',                   -- New location address
-        42.32144530,                          -- New latitude
-        -71.08203400,                         -- New longitude
-        '2026-03-13 12:55:00'                 -- UTC timestamp when sensor installed at new location
-    );
-    ```
+```sql
+INSERT INTO nu_deployments (deployment_id, box_id, location_id, install_datetime)
+VALUES (
+    58,                       -- Next available deployment_id (from Step 0)
+    23,                       -- box_id
+    6,                        -- location_id (verify with the research team its value)
+    '2026-03-13 12:55:00'     -- UTC timestamp when sensor installed at new location
+);
+```
 
 **Notes:**
 
-- The new record automatically gets the next available `deployment_id` (you cannot specify it)
-- The new record defaults to `is_active = 1` and `created_at = GETUTCDATE()`
+- `deployment_id` must be set manually — always run the MAX check in Step 0 first
+- `is_active` defaults to 1 and `created_at` defaults to `GETUTCDATE()` if those defaults are configured on the table
 - If Step 1 fails or is skipped, Step 2 will fail with a unique constraint violation
+- Location address and coordinates live in `nu_locations` — reference them via `location_id`
 
 **Verification:**
 
 Check that the deployment was added correctly:
 
-    ```sql
-    SELECT deployment_id, box_id, location_address, install_datetime, is_active
-    FROM nu_sensors
-    WHERE box_id = 9
-    ORDER BY deployment_id DESC;
-    ```
+```sql
+SELECT d.deployment_id, d.box_id, l.location_address, d.install_datetime, d.is_active
+FROM nu_deployments d
+JOIN nu_locations l ON d.location_id = l.location_id
+WHERE d.box_id = 9
+ORDER BY d.deployment_id DESC;
+```
 
 You should see:
 
@@ -104,47 +112,27 @@ If data was already recorded under the old deployment_id after the sensor was mo
 
 **Scenario:** You accidentally inserted a deployment record with wrong information and need to delete it and start over.
 
-**Important:** Simply deleting a row from `nu_sensors` does NOT reset the auto-incrementing `deployment_id` counter. If you delete deployment_id 57 and insert a new record, it will become deployment_id 58, not 57.
-
 **Step 1: Delete the incorrect record**
 
 ```sql
-DELETE FROM nu_sensors
-WHERE deployment_id = 57;  -- The incorrect record
+DELETE FROM nu_deployments
+WHERE deployment_id = 58;  -- The incorrect record
 ```
 
-**Step 2: Reset the identity counter**
-
-After deletion, reset the counter to the last valid deployment_id:
+**Step 2: Verify the deletion**
 
 ```sql
--- Check current identity value
-DBCC CHECKIDENT ('nu_sensors', NORESEED);
-
--- Reset to last valid deployment_id (56 in this example)
--- Next insertion will be 57
-DBCC CHECKIDENT ('nu_sensors', RESEED, 56);
+SELECT MAX(deployment_id) AS last_deployment_id
+FROM nu_deployments;
 ```
 
-**Verification:**
-
-Confirm the counter is set correctly:
-
-```sql
--- Should show "Current identity value: 56, Current column value: 56"
-DBCC CHECKIDENT ('nu_sensors', NORESEED);
-
--- Check the last actual record
-SELECT MAX(deployment_id) as last_deployment_id
-FROM nu_sensors;
-```
+Confirm the max is back to the previous valid value. The next insert should use `last_deployment_id + 1` again.
 
 **Notes:**
 
-- The RESEED value should be the highest existing deployment_id
-- If you RESEED to 56, the next INSERT will create deployment_id 57
-- Only use this immediately after deletion - don't reset the counter arbitrarily
-- This ensures deployment_id values remain sequential without gaps
+- Since `deployment_id` is manually assigned, there is no identity counter to reset
+- Deleting a record simply frees that ID — if you reinsert, use the same ID or the next available one
+- Avoid leaving gaps in `deployment_id` values for clarity, but gaps are not a technical problem
 
 ---
 
@@ -154,9 +142,9 @@ FROM nu_sensors;
 
 This includes:
 
-- `nu_sensors.install_datetime`
-- `nu_sensors.uninstall_datetime`
-- `nu_sensors.created_at`
+- `nu_deployments.install_datetime`
+- `nu_deployments.uninstall_datetime`
+- `nu_deployments.created_at`
 - `nu_quality_issues.start_datetime`
 - `nu_quality_issues.end_datetime`
 - `nu_readings.timestamp`
@@ -166,13 +154,13 @@ This includes:
 
 ```sql
 -- WRONG: Using local Eastern time
-INSERT INTO nu_sensors (box_id, install_datetime)
-VALUES (23, '2026-03-13 12:55:00');  -- If this is EST, it's 5 hours off!
+INSERT INTO nu_deployments (deployment_id, box_id, location_id, install_datetime)
+VALUES (58, 23, 6, '2026-03-13 12:55:00');  -- If this is EST, it's 5 hours off!
 
 -- CORRECT: Convert to UTC first
 -- If sensor was installed at 12:55 PM EST (UTC-5), use 17:55 UTC
-INSERT INTO nu_sensors (box_id, install_datetime)
-VALUES (23, '2026-03-13 17:55:00');
+INSERT INTO nu_deployments (deployment_id, box_id, location_id, install_datetime)
+VALUES (58, 23, 6, '2026-03-13 17:55:00');
 ```
 
 **Converting EST/EDT to UTC:**
@@ -189,35 +177,33 @@ VALUES (23, '2026-03-13 17:55:00');
 
 Correct them by adding the appropriate offset:
 
-    ```sql
-    -- For winter timestamps (EST = UTC-5), add 5 hours
-    UPDATE nu_sensors
-    SET install_datetime = DATEADD(HOUR, 5, install_datetime)
-    WHERE deployment_id = 57
-    AND install_datetime < DATEADD(HOUR, 5, install_datetime);  -- Safety check
+```sql
+-- For winter timestamps (EST = UTC-5), add 5 hours
+UPDATE nu_deployments
+SET install_datetime = DATEADD(HOUR, 5, install_datetime)
+WHERE deployment_id = 57;
 
-    -- For summer timestamps (EDT = UTC-4), add 4 hours
-    UPDATE nu_sensors
-    SET install_datetime = DATEADD(HOUR, 4, install_datetime)
-    WHERE deployment_id = 58;
-    ```
+-- For summer timestamps (EDT = UTC-4), add 4 hours
+UPDATE nu_deployments
+SET install_datetime = DATEADD(HOUR, 4, install_datetime)
+WHERE deployment_id = 58;
+```
 
 **Verification:**
 
 Check if your timestamps look reasonable for UTC (EST +5 hours):
 
-    ```sql
-    SELECT 
-        deployment_id,
-        box_id,
-        install_datetime,
-        DATEADD(HOUR, -5, install_datetime) as 'EST_equivalent'
-    FROM nu_sensors
-    WHERE deployment_id IN (57, 58);
-    ```
+```sql
+SELECT 
+    deployment_id,
+    box_id,
+    install_datetime,
+    DATEADD(HOUR, -5, install_datetime) AS EST_equivalent
+FROM nu_deployments
+WHERE deployment_id IN (57, 58);
+```
 
-The `EST_equivalent` column should match what you remember as the local installation time.
-
+The `EST_equivalent` column should match what you remember as the local installation time
 ---
 
 ### Correcting Deployment Information
@@ -228,45 +214,45 @@ Use these queries to fix typos or incorrect information in existing deployment r
 
 **Correcting Location Id:**
 
-    ```sql
-    UPDATE nu_sensors
-    SET location_id = 'Corrected Location Id'
-    WHERE deployment_id = 10;
-    ```
-
-**Correcting Location Address:**
-
-    ```sql
-    UPDATE nu_sensors
-    SET location_address = 'Corrected Address'
-    WHERE deployment_id = 10;
-    ```
-
-**Correcting Coordinates:**
-
-    ```sql
-    UPDATE nu_sensors
-    SET 
-        latitude = 42.31234,
-        longitude = -71.09876
-    WHERE deployment_id = 10;
-    ```
+```sql
+UPDATE nu_deployments
+SET location_id = 6
+WHERE deployment_id = 10;
+```
 
 **Correcting Install Datetime:**
 
-    ```sql
-    UPDATE nu_sensors
-    SET install_datetime = '2025-10-31 12:00:00'
-    WHERE deployment_id = 10;
-    ```
+```sql
+UPDATE nu_deployments
+SET install_datetime = '2025-10-31 12:00:00'
+WHERE deployment_id = 10;
+```
+
+**Correcting Location Address or Coordinates:**
+
+These fields now live in `nu_locations`. Update them there directly — all deployments referencing that `location_id` will reflect the change automatically:
+
+```sql
+UPDATE nu_locations
+SET location_address = 'Corrected Address'
+WHERE location_id = 6;
+
+UPDATE nu_locations
+SET
+    latitude  = 42.31234,
+    longitude = -71.09876
+WHERE location_id = 6;
+```
 
 **Correcting Particle Core ID:**
 
-    ```sql
-    UPDATE nu_sensors
-    SET coreid = 'e00fce68cd4bb76b1b85dbe7'
-    WHERE deployment_id = 10;
-    ```
+`coreid` now lives in `nu_boxes`. Update it there:
+
+```sql
+UPDATE nu_boxes
+SET coreid = 'e00fce68cd4bb76b1b85dbe7'
+WHERE box_id = 10;
+```
 
 ---
 
@@ -321,14 +307,14 @@ Good issue descriptions help researchers understand data quality problems:
 
 ### Resolving Quality Issues
 
-When a sensor issue is fixed (hardware replaced, firmware updated, etc.), mark the issue as resolved by setting the `end_datetime`.
+When a sensor issue is fixed (hardware replaced, firmware updated, etc.), mark the issue as resolved by setting the `end_datetime`. For marking the issues as solved, you will need to check first the row id for the issue by queryiong the data in the quality issues table.
 
 **Marking an Issue as Resolved:**
 
     ```sql
     UPDATE nu_quality_issues
     SET end_datetime = '2025-11-18 12:00:00'  -- UTC timestamp when issue was fixed
-    WHERE box_id = 5;  -- If the box has several quality issues use row 'id' instead of 'box_id'
+    WHERE id = 5;  -- We use the row id (box_id) in case a box has several issues
     ```
 
 **Verification:**
@@ -338,7 +324,7 @@ The `is_resolved` computed column automatically updates to 1:
     ```sql
     SELECT id, box_id, issue_type, start_datetime, end_datetime, is_resolved
     FROM nu_quality_issues
-    WHERE box_id = 5;  -- If the box has several quality issues use row 'id' instead of 'box_id'
+    WHERE id = 5;  -- We use the row id (not box_id) in case a box has several issues
     ```
 
 You should see `is_resolved = 1` and `end_datetime` populated.
@@ -373,33 +359,33 @@ These procedures handle scenarios where database records need updating after dat
 
 Find how many readings need updating:
 
-    ```sql
-    -- Example: new deployment_id = 60, box_id = 10
-    DECLARE @install_datetime DATETIME2;
-    SELECT @install_datetime = install_datetime FROM nu_sensors WHERE deployment_id = 60;
+```sql
+-- Example: new deployment_id = 60, box_id = 10
+DECLARE @install_datetime DATETIME2;
+SELECT @install_datetime = install_datetime FROM nu_deployments WHERE deployment_id = 60;
 
-    SELECT COUNT(*) as affected_readings  -- Use SELECT * for the full list of affected rows
-    FROM nu_readings
-    WHERE box_id = 10
-    AND created_at >= @install_datetime
-    AND timestamp >= @install_datetime
-    AND deployment_id != 60;
-    ```
+SELECT COUNT(*) as affected_readings  -- Use SELECT * for the full list of affected rows
+FROM nu_readings
+WHERE box_id = 10
+AND created_at >= @install_datetime
+AND timestamp >= @install_datetime
+AND deployment_id != 60;
+```
 
 **Step 2: Update the readings**
 
-    ```sql
-    -- Example: new deployment_id = 60, box_id = 10
-    DECLARE @install_datetime DATETIME2;
-    SELECT @install_datetime = install_datetime FROM nu_sensors WHERE deployment_id = 60;
+```sql
+-- Example: new deployment_id = 60, box_id = 10
+DECLARE @install_datetime DATETIME2;
+SELECT @install_datetime = install_datetime FROM nu_deployments WHERE deployment_id = 60;
 
-    UPDATE nu_readings
-    SET deployment_id = 60, quality_ok = 1
-    WHERE box_id = 10
-    AND created_at >= @install_datetime
-    AND timestamp >= @install_datetime
-    AND deployment_id != 60;
-    ```
+UPDATE nu_readings
+SET deployment_id = 60, quality_ok = 1
+WHERE box_id = 10
+AND created_at >= @install_datetime
+AND timestamp >= @install_datetime
+AND deployment_id != 60;
+```
 
 **Note:** The dual filter on both `created_at` and `timestamp` ensures we only update data that was actually collected after the new deployment, avoiding incorrectly reassigning manually uploaded historical data (e.g., from SD card backfill).
 
@@ -418,37 +404,38 @@ Box 10 moved to new location on Mar 13, 2026 at 17:55 UTC (new deployment_id = 6
 
 First, find the deployment_id for the uninstalled sensor:
 
-    ```sql
-    SELECT deployment_id, box_id, location_address, install_datetime, uninstall_datetime
-    FROM nu_sensors
-    WHERE box_id = 9
-    AND uninstall_datetime IS NOT NULL
-    ORDER BY deployment_id DESC;
-    ```
+```sql
+SELECT d.deployment_id, d.box_id, l.location_address, d.install_datetime, d.uninstall_datetime
+FROM nu_deployments d
+JOIN nu_locations l ON d.location_id = l.location_id
+WHERE d.box_id = 9
+AND d.uninstall_datetime IS NOT NULL
+ORDER BY d.deployment_id DESC;
+```
 
 Then check how many readings are affected:
 
-    ```sql
-    SELECT COUNT(*) as readings_after_uninstall
-    FROM nu_readings r
-    JOIN nu_sensors s ON r.deployment_id = s.deployment_id
-    WHERE r.deployment_id = 9  -- Specific deployment that was uninstalled
-    AND s.uninstall_datetime IS NOT NULL
-    AND r.timestamp > s.uninstall_datetime
-    AND r.quality_ok = 1;
-    ```
+```sql
+SELECT COUNT(*) as readings_after_uninstall
+FROM nu_readings r
+JOIN nu_deployments d ON r.deployment_id = d.deployment_id
+WHERE r.deployment_id = 9  -- Specific deployment that was uninstalled
+AND d.uninstall_datetime IS NOT NULL
+AND r.timestamp > d.uninstall_datetime
+AND r.quality_ok = 1;
+```
 
 **Step 2: Flag the readings**
 
-    ```sql
-    UPDATE nu_readings
-    SET quality_ok = 0
-    WHERE deployment_id = 9  -- Use specific deployment_id, not box_id
-    AND timestamp > '2025-11-07 00:00:00'  -- uninstall_datetime from nu_sensors
-    AND quality_ok = 1;
-    ```
+```sql
+UPDATE nu_readings
+SET quality_ok = 0
+WHERE deployment_id = 9  -- Use specific deployment_id, not box_id
+AND timestamp > '2025-11-07 00:00:00'  -- uninstall_datetime from nu_deployments
+AND quality_ok = 1;
+```
 
-**Why use deployment_id:** A box_id can have multiple deployments over time. Using deployment_id ensures you only flag readings from the specific uninstalled deployment, not from earlier or later deployments of the same sensor.
+**Why use deployment_id:** A box_id can have multiple deployments over time. Using deployment_id ensures you only flag readings from the specific uninstalled deployment, not from earlier or later deployments of the same sensor
 
 ---
 

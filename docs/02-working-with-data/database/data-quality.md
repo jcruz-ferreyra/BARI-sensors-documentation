@@ -86,8 +86,8 @@ The decision to include or exclude flagged data depends on your analysis goals a
 ```sql
 SELECT r.timestamp, r.temperature, r.humidity, r.noise
 FROM nu_readings r
-JOIN nu_sensors s ON r.deployment_id = s.deployment_id
-WHERE s.location_id = 1
+JOIN nu_deployments d ON r.deployment_id = d.deployment_id
+WHERE d.location_id = 1
     AND r.timestamp >= '2025-06-01 00:00:00'
     AND r.quality_ok = 1  -- Only valid data
 ORDER BY r.timestamp;
@@ -107,8 +107,8 @@ SELECT
         WHEN r.quality_ok = 0 THEN 'Flagged'
     END AS quality_status
 FROM nu_readings r
-JOIN nu_sensors s ON r.deployment_id = s.deployment_id
-WHERE s.location_id = 1
+JOIN nu_deployments d ON r.deployment_id = d.deployment_id
+WHERE d.location_id = 1
     AND r.timestamp >= '2025-06-01 00:00:00'
 ORDER BY r.timestamp;
 ```
@@ -117,16 +117,17 @@ ORDER BY r.timestamp;
 
 ```sql
 SELECT 
-    s.box_id,
-    s.location_address,
+    d.box_id,
+    l.location_address,
     COUNT(*) AS total_readings,
     SUM(CASE WHEN r.quality_ok = 1 THEN 1 ELSE 0 END) AS valid_readings,
     SUM(CASE WHEN r.quality_ok = 0 THEN 1 ELSE 0 END) AS flagged_readings,
     CAST(SUM(CASE WHEN r.quality_ok = 1 THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 AS valid_percentage
 FROM nu_readings r
-JOIN nu_sensors s ON r.deployment_id = s.deployment_id
+JOIN nu_deployments d ON r.deployment_id = d.deployment_id
+JOIN nu_locations l ON d.location_id = l.location_id
 WHERE r.timestamp >= '2025-06-01 00:00:00'
-GROUP BY s.box_id, s.location_address
+GROUP BY d.box_id, l.location_address
 ORDER BY valid_percentage;
 ```
 
@@ -146,8 +147,7 @@ SELECT
     qi.start_datetime,
     qi.end_datetime
 FROM nu_readings r
-JOIN nu_sensors s ON r.deployment_id = s.deployment_id
-JOIN nu_quality_issues qi ON s.box_id = qi.box_id
+JOIN nu_quality_issues qi ON r.box_id = qi.box_id
     AND r.timestamp >= qi.start_datetime
     AND (qi.end_datetime IS NULL OR r.timestamp <= qi.end_datetime)
 WHERE r.deployment_id = 19
@@ -190,17 +190,15 @@ WHERE timestamp >= '2025-06-01 00:00:00'
 
 ```sql
 SELECT 
-    s.box_id,
-    s.location_address,
+    box_id,
     COUNT(*) AS total_readings,
-    SUM(CASE WHEN r.quality_ok = 0 THEN 1 ELSE 0 END) AS flagged_readings,
-    CAST(SUM(CASE WHEN r.quality_ok = 0 THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 AS flagged_percentage
-FROM nu_readings r
-JOIN nu_sensors s ON r.deployment_id = s.deployment_id
-WHERE r.timestamp >= '2025-06-01 00:00:00'
-    AND r.timestamp <= '2025-06-30 23:59:59'
-GROUP BY s.box_id, s.location_address
-HAVING SUM(CASE WHEN r.quality_ok = 0 THEN 1 ELSE 0 END) > 0
+    SUM(CASE WHEN quality_ok = 0 THEN 1 ELSE 0 END) AS flagged_readings,
+    CAST(SUM(CASE WHEN quality_ok = 0 THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 AS flagged_percentage
+FROM nu_readings
+WHERE timestamp >= '2025-06-01 00:00:00'
+    AND timestamp <= '2025-06-30 23:59:59'
+GROUP BY box_id
+HAVING SUM(CASE WHEN quality_ok = 0 THEN 1 ELSE 0 END) > 0
 ORDER BY flagged_percentage DESC;
 ```
 
@@ -208,39 +206,35 @@ ORDER BY flagged_percentage DESC;
 
 ```sql
 SELECT 
-    s.box_id,
-    s.location_address,
+    box_id,
     COUNT(*) AS total_readings,
-    SUM(CASE WHEN r.temperature IS NULL THEN 1 ELSE 0 END) AS missing_temperature,
-    SUM(CASE WHEN r.humidity IS NULL THEN 1 ELSE 0 END) AS missing_humidity,
-    SUM(CASE WHEN r.noise IS NULL THEN 1 ELSE 0 END) AS missing_noise
-FROM nu_readings r
-JOIN nu_sensors s ON r.deployment_id = s.deployment_id
-WHERE r.timestamp >= '2025-06-01 00:00:00'
-    AND r.timestamp <= '2025-06-30 23:59:59'
-GROUP BY s.box_id, s.location_address
-HAVING SUM(CASE WHEN r.temperature IS NULL THEN 1 ELSE 0 END) > 0
-    OR SUM(CASE WHEN r.humidity IS NULL THEN 1 ELSE 0 END) > 0
-    OR SUM(CASE WHEN r.noise IS NULL THEN 1 ELSE 0 END) > 0
-ORDER BY s.box_id;
+    SUM(CASE WHEN temperature IS NULL THEN 1 ELSE 0 END) AS missing_temperature,
+    SUM(CASE WHEN humidity IS NULL THEN 1 ELSE 0 END) AS missing_humidity,
+    SUM(CASE WHEN noise IS NULL THEN 1 ELSE 0 END) AS missing_noise
+FROM nu_readings
+WHERE timestamp >= '2025-06-01 00:00:00'
+    AND timestamp <= '2025-06-30 23:59:59'
+GROUP BY box_id
+HAVING SUM(CASE WHEN temperature IS NULL THEN 1 ELSE 0 END) > 0
+    OR SUM(CASE WHEN humidity IS NULL THEN 1 ELSE 0 END) > 0
+    OR SUM(CASE WHEN noise IS NULL THEN 1 ELSE 0 END) > 0
+ORDER BY box_id;
 ```
 
 **View active quality issues that affect your analysis period:**
 
 ```sql
 SELECT 
-    qi.box_id,
-    s.location_address,
-    qi.issue_type,
-    qi.issue_description,
-    qi.start_datetime,
-    qi.end_datetime,
-    CASE WHEN qi.is_resolved = 1 THEN 'Resolved' ELSE 'Ongoing' END AS status
-FROM nu_quality_issues qi
-JOIN nu_sensors s ON qi.box_id = s.box_id AND s.is_active = 1
-WHERE qi.start_datetime <= '2025-06-30 23:59:59'
-    AND (qi.end_datetime IS NULL OR qi.end_datetime >= '2025-06-01 00:00:00')
-ORDER BY qi.start_datetime;
+    box_id,
+    issue_type,
+    issue_description,
+    start_datetime,
+    end_datetime,
+    CASE WHEN is_resolved = 1 THEN 'Resolved' ELSE 'Ongoing' END AS status
+FROM nu_quality_issues
+WHERE start_datetime <= '2025-06-30 23:59:59'
+    AND (end_datetime IS NULL OR end_datetime >= '2025-06-01 00:00:00')
+ORDER BY start_datetime;
 ```
 
 **Check when data arrived in the pipeline (not when it was written into the database):**

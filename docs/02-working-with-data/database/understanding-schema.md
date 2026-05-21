@@ -6,9 +6,11 @@ For complete technical specifications including table creation statements and DD
 
 ## Overview
 
-The database contains five main tables:
+The database contains seven main tables:
 
-- **nu_sensors** - Metadata about sensor deployments and locations
+- **nu_boxes** - Physical sensor hardware registry
+- **nu_locations** - Sensor installation locations
+- **nu_deployments** - Sensor deployment history linking boxes to locations
 - **nu_readings** - Environmental sensor readings (temperature, humidity, noise)
 - **nu_errors** - Error messages from sensors
 - **nu_startup** - Sensor boot/restart logs
@@ -16,23 +18,35 @@ The database contains five main tables:
 
 ---
 
-## nu_sensors (Metadata)
+## nu_boxes (Hardware Registry)
 
-This table tracks sensor deployments. A "deployment" represents a specific sensor (box_id) installed at a specific location during a specific time period. When a sensor is moved to a new location, it gets a new deployment_id.
+This table stores one record per physical sensor device. It rarely changes — a new row is added only when a new sensor is introduced to the network.
 
 ### Columns
 
-**deployment_id** (PK, int, not null)
-Unique identifier for this deployment. Referenced by nu_readings to link sensor data to physical locations.
-
-**box_id** (int, not null)
+**box_id** (PK, int, not null)
 Physical sensor identifier (1-55). This number is printed on the sensor hardware and appears in sensor messages.
-
-**location_id** (int, null)
-Optional reference to a standardized location.
 
 **coreid** (nvarchar(255), not null)
 Particle device ID - unique hardware identifier from Particle.io platform. Used to validate webhook data comes from legitimate sensors.
+
+### Example Record
+
+```
+box_id:   1
+coreid:   e00fce688d4f56458911d5b9
+```
+
+---
+
+## nu_locations (Locations)
+
+This table stores physical installation sites. A location can be reused across multiple deployments if a sensor is reinstalled at the same place.
+
+### Columns
+
+**location_id** (PK, int, not null)
+Unique identifier for this location.
 
 **location_address** (nvarchar(255), not null)
 Human-readable address or landmark description of where the sensor is installed (e.g., "Siever St & Tiffany Moore Tot Park").
@@ -42,6 +56,32 @@ Geographic latitude of sensor location in decimal degrees.
 
 **longitude** (decimal(11,8), not null)
 Geographic longitude of sensor location in decimal degrees.
+
+### Example Record
+
+```
+location_id:       1
+location_address:  Siever st & Tiffany Moore Tot Park
+latitude:          42.30900000
+longitude:         -71.09100000
+```
+
+---
+
+## nu_deployments (Deployment History)
+
+This table tracks when a sensor (box_id) was installed at a specific location and for how long. A new record is created each time a sensor is moved. This is the table queried by the Database Writer to resolve which deployment a reading belongs to.
+
+### Columns
+
+**deployment_id** (PK, int, not null)
+Unique identifier for this deployment. Referenced by nu_readings to link sensor data to physical locations. Assigned manually — check `SELECT MAX(deployment_id) FROM nu_deployments` before inserting.
+
+**box_id** (FK → nu_boxes, int, not null)
+Physical sensor identifier.
+
+**location_id** (FK → nu_locations, int, not null)
+Reference to the location where the sensor was installed.
 
 **install_datetime** (datetime2(7), not null)
 UTC timestamp when the sensor was installed at this location.
@@ -60,18 +100,14 @@ UTC timestamp when the sensor was removed from this location. NULL for currently
 ```
 deployment_id:      1
 box_id:             1
-location_id:        NULL
-coreid:             e00fce688d4f56458911d5b9
-location_address:   Siever st & Tiffany Moore Tot Park
-latitude:           42.30900000
-longitude:          -71.09100000
+location_id:        1
 install_datetime:   2025-06-20 13:17:00
 is_active:          1
 created_at:         2025-10-28 20:42:19
 uninstall_datetime: NULL
 ```
 
-This shows sensor Box 1 actively deployed at Siever St since June 20, 2025.
+This shows sensor Box 1 actively deployed at location 1 since June 20, 2025.
 
 ### Indexes
 
@@ -82,7 +118,7 @@ Ensures only one active deployment exists per sensor at any time. This index pre
 
 **Deployment vs Sensor:** A sensor (box_id) can have multiple deployments over time. When sensor Box 1 moves from Location A to Location B, it gets two deployment records - the first with uninstall_datetime filled, the second with is_active = 1.
 
-**Active Deployments:** The Database Writer function queries this table to find the current deployment_id for incoming sensor data based on box_id and is_active = 1.
+**Active Deployments:** The Database Writer function queries nu_deployments to find the current deployment_id for incoming sensor data based on box_id and is_active = 1.
 
 **Location History:** Historical deployments (is_active = 0, uninstall_datetime populated) preserve location history for data analysis.
 

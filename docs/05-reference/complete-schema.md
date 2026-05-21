@@ -6,11 +6,13 @@ For a practical guide to working with the schema, see [Understanding the Schema]
 
 ## Table Overview
 
-The database contains five main tables:
+The database contains seven main tables:
 
 | Table | Purpose | Primary Key |
 |-------|---------|-------------|
-| nu_sensors | Sensor deployment metadata and locations | deployment_id |
+| nu_boxes | Physical sensor hardware registry | box_id |
+| nu_locations | Sensor installation locations | location_id |
+| nu_deployments | Sensor deployment history linking boxes to locations | deployment_id |
 | nu_readings | Environmental sensor readings | id |
 | nu_errors | Error messages from sensors | id |
 | nu_startup | Sensor boot/restart logs | id |
@@ -20,25 +22,74 @@ All timestamp columns use `DATETIME2(7)` and store values in UTC.
 
 ---
 
-## nu_sensors
+## nu_boxes
 
-Tracks sensor deployments. Each deployment represents a specific sensor (box_id) installed at a specific location during a specific time period.
+Stores one record per physical sensor device. Rarely changes — a new row is added only when a new sensor is introduced to the network.
 
 ### Table Creation
 
 ```sql
-CREATE TABLE nu_sensors (
-    deployment_id INT IDENTITY(1,1) PRIMARY KEY,
+CREATE TABLE nu_boxes (
     box_id INT NOT NULL,
-    location_id INT NULL,
     coreid NVARCHAR(255) NOT NULL,
+    CONSTRAINT PK_nu_boxes PRIMARY KEY (box_id)
+);
+```
+
+### Column Specifications
+
+| Column | Type | Nullable | Description |
+|--------|------|----------|-------------|
+| box_id | INT | NOT NULL | Primary key. Physical sensor identifier (1-55), printed on hardware |
+| coreid | NVARCHAR(255) | NOT NULL | Particle device ID for webhook validation |
+
+---
+
+## nu_locations
+
+Stores physical installation sites. A location can be reused across multiple deployments if a sensor is reinstalled at the same place.
+
+### Table Creation
+
+```sql
+CREATE TABLE nu_locations (
+    location_id INT NOT NULL,
     location_address NVARCHAR(255) NOT NULL,
     latitude DECIMAL(10, 8) NOT NULL,
     longitude DECIMAL(11, 8) NOT NULL,
+    CONSTRAINT PK_nu_locations PRIMARY KEY (location_id)
+);
+```
+
+### Column Specifications
+
+| Column | Type | Nullable | Description |
+|--------|------|----------|-------------|
+| location_id | INT | NOT NULL | Primary key, assigned manually |
+| location_address | NVARCHAR(255) | NOT NULL | Human-readable location description |
+| latitude | DECIMAL(10,8) | NOT NULL | Geographic latitude in decimal degrees |
+| longitude | DECIMAL(11,8) | NOT NULL | Geographic longitude in decimal degrees |
+
+---
+
+## nu_deployments
+
+Tracks when a sensor was installed at a specific location and for how long. A new record is created each time a sensor is moved. This is the table queried by the Database Writer to resolve which deployment a reading belongs to.
+
+### Table Creation
+
+```sql
+CREATE TABLE nu_deployments (
+    deployment_id INT NOT NULL,
+    box_id INT NOT NULL,
+    location_id INT NOT NULL,
     install_datetime DATETIME2 NOT NULL,
     is_active BIT DEFAULT 1,
     created_at DATETIME2 DEFAULT GETUTCDATE(),
-    uninstall_datetime DATETIME2 NULL
+    uninstall_datetime DATETIME2 NULL,
+    CONSTRAINT PK_nu_deployments PRIMARY KEY (deployment_id),
+    CONSTRAINT FK_deployments_box FOREIGN KEY (box_id) REFERENCES nu_boxes(box_id),
+    CONSTRAINT FK_deployments_location FOREIGN KEY (location_id) REFERENCES nu_locations(location_id)
 );
 ```
 
@@ -46,8 +97,8 @@ CREATE TABLE nu_sensors (
 
 ```sql
 -- Ensures only one active deployment per sensor
-CREATE UNIQUE INDEX UQ_active_box_id 
-ON nu_sensors (box_id) 
+CREATE UNIQUE INDEX UQ_active_box_id
+ON nu_deployments (box_id)
 WHERE is_active = 1;
 ```
 
@@ -55,13 +106,9 @@ WHERE is_active = 1;
 
 | Column | Type | Nullable | Description |
 |--------|------|----------|-------------|
-| deployment_id | INT | NOT NULL | Primary key, auto-incrementing unique identifier |
-| box_id | INT | NOT NULL | Physical sensor identifier (1-55) |
-| location_id | INT | NULL | Optional standardized location reference (unused) |
-| coreid | NVARCHAR(255) | NOT NULL | Particle device ID for webhook validation |
-| location_address | NVARCHAR(255) | NOT NULL | Human-readable location description |
-| latitude | DECIMAL(10,8) | NOT NULL | Geographic latitude in decimal degrees |
-| longitude | DECIMAL(11,8) | NOT NULL | Geographic longitude in decimal degrees |
+| deployment_id | INT | NOT NULL | Primary key, assigned manually — check MAX before inserting |
+| box_id | INT | NOT NULL | FK to nu_boxes. Physical sensor identifier (1-55) |
+| location_id | INT | NOT NULL | FK to nu_locations |
 | install_datetime | DATETIME2 | NOT NULL | UTC timestamp of sensor installation |
 | is_active | BIT | NULL | Deployment status: 1=active, 0=inactive (default: 1) |
 | created_at | DATETIME2 | NULL | UTC timestamp when record was created (default: GETUTCDATE()) |
@@ -71,9 +118,8 @@ WHERE is_active = 1;
 
 - Only one deployment per box_id can have `is_active = 1` (enforced by UQ_active_box_id index)
 - When a sensor is moved, the old deployment gets `is_active = 0` and `uninstall_datetime` populated
+- `deployment_id` is assigned manually — always run `SELECT MAX(deployment_id) FROM nu_deployments` before inserting
 - Database Writer queries this table to map box_id to deployment_id for incoming data
-
----
 
 ---
 
@@ -98,7 +144,7 @@ CREATE TABLE nu_readings (
     quality_ok BIT DEFAULT 1,
     CONSTRAINT UK_readings_box_timestamp 
         UNIQUE (box_id, timestamp),
-    FOREIGN KEY (deployment_id) REFERENCES nu_sensors(deployment_id)
+    FOREIGN KEY (deployment_id) REFERENCES nu_deployments(deployment_id)
 );
 ```
 
@@ -123,7 +169,7 @@ ON nu_readings (created_at, box_id);
 | Column | Type | Nullable | Description |
 |--------|------|----------|-------------|
 | id | BIGINT | NOT NULL | Primary key, auto-incrementing unique identifier |
-| deployment_id | INT | NOT NULL | Foreign key to nu_sensors, links reading to location |
+| deployment_id | INT | NOT NULL | Foreign key to nu_deployments, links reading to location |
 | box_id | INT | NOT NULL | Physical sensor identifier for quick lookups |
 | timestamp | DATETIME2(7) | NOT NULL | UTC timestamp when reading was collected |
 | temperature | FLOAT | NULL | Temperature in Fahrenheit |
@@ -137,7 +183,7 @@ ON nu_readings (created_at, box_id);
 ### Constraints and Business Rules
 
 - **UK_readings_box_timestamp:** Prevents duplicate readings for same sensor at same timestamp
-- **Foreign Key:** deployment_id must exist in nu_sensors table
+- **Foreign Key:** deployment_id must exist in nu_deployments table
 - Sensor values can be NULL if sensor malfunction or data corruption detected
 - quality_ok flag set to 0 when data quality issues identified (see nu_quality_issues table)
 - Box_id duplicates deployment_id information for query performance (denormalized)
